@@ -94,6 +94,8 @@ describe("vSTRC Protocol", function () {
         it("should execute rebalanceYield after epoch duration", async function () {
             // Fast forward 7 days
             await time.increase(7 * 24 * 60 * 60);
+            // Refresh oracle so it's not stale after time skip
+            await vstrcFeed.setPrice(parseUSDC("100"));
 
             await expect(vault.connect(keeper).rebalanceYield())
                 .to.emit(vault, "YieldRebalanced");
@@ -102,9 +104,9 @@ describe("vSTRC Protocol", function () {
         });
 
         it("should increase yield rate when price is below target", async function () {
-            // Set vSTRC price below target ($90 < $100)
-            await vstrcFeed.setPrice(parseUSDC("90"));
+            // Fast forward, then set vSTRC price below target ($90 < $100)
             await time.increase(7 * 24 * 60 * 60);
+            await vstrcFeed.setPrice(parseUSDC("90"));
 
             await vault.connect(keeper).rebalanceYield();
 
@@ -114,9 +116,9 @@ describe("vSTRC Protocol", function () {
         });
 
         it("should decrease yield rate when price is above target", async function () {
-            // Set vSTRC price above target ($110 > $100)
-            await vstrcFeed.setPrice(parseUSDC("110"));
+            // Fast forward, then set vSTRC price above target ($110 > $100)
             await time.increase(7 * 24 * 60 * 60);
+            await vstrcFeed.setPrice(parseUSDC("110"));
 
             await vault.connect(keeper).rebalanceYield();
 
@@ -126,9 +128,9 @@ describe("vSTRC Protocol", function () {
         });
 
         it("should clamp rate to min/max bounds", async function () {
-            // Extreme low price → should hit max rate
-            await vstrcFeed.setPrice(parseUSDC("50"));
+            // Fast forward, then set extreme low price → should hit max rate
             await time.increase(7 * 24 * 60 * 60);
+            await vstrcFeed.setPrice(parseUSDC("50"));
             await vault.connect(keeper).rebalanceYield();
 
             const rate = await vault.currentRateBps();
@@ -202,13 +204,13 @@ describe("vSTRC Protocol", function () {
             // Price at $90 (10% below $100 target)
             // Expected adjustment = sensitivity * deviation = 2000 * 1000/10000 = 200 bps
             // Expected rate = 800 + 200 = 1000 bps
-            await vstrcFeed.setPrice(parseUSDC("90"));
-
             const depositAmount = parseUSDC("10000");
             await usdc.connect(alice).approve(await vault.getAddress(), depositAmount);
             await vault.connect(alice).deposit(depositAmount, alice.address);
 
+            // Fast forward, then set price below target ($90)
             await time.increase(7 * 24 * 60 * 60);
+            await vstrcFeed.setPrice(parseUSDC("90"));
             await vault.connect(keeper).rebalanceYield();
 
             const rate = await vault.currentRateBps();
@@ -219,13 +221,13 @@ describe("vSTRC Protocol", function () {
             // Price at $110 (10% above $100 target)
             // Expected adjustment = sensitivity * deviation = 2000 * 1000/10000 = 200 bps
             // Expected rate = 800 - 200 = 600 bps
-            await vstrcFeed.setPrice(parseUSDC("110"));
-
             const depositAmount = parseUSDC("10000");
             await usdc.connect(alice).approve(await vault.getAddress(), depositAmount);
             await vault.connect(alice).deposit(depositAmount, alice.address);
 
+            // Fast forward, then set price above target ($110)
             await time.increase(7 * 24 * 60 * 60);
+            await vstrcFeed.setPrice(parseUSDC("110"));
             await vault.connect(keeper).rebalanceYield();
 
             const rate = await vault.currentRateBps();

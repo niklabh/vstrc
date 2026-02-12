@@ -51,11 +51,6 @@ contract BTCStrategy is IStrategy, AccessControl, ReentrancyGuard {
     uint256 public circuitBreakerWindow = 1 hours;
     bool public circuitBreakerTripped;
 
-    // ─── Emergency Withdrawal Timelock [H-5] ─────────────────────────
-    address public pendingEmergencyTo;
-    uint256 public emergencyRequestTimestamp;
-    uint256 public constant EMERGENCY_TIMELOCK = 24 hours;
-
     // ─── Events ──────────────────────────────────────────────────────
     event Deployed(uint256 usdcAmount, uint256 btcBought, uint256 cashDeployed);
     event Withdrawn(uint256 usdcRequested, uint256 usdcReturned);
@@ -67,10 +62,7 @@ contract BTCStrategy is IStrategy, AccessControl, ReentrancyGuard {
     // [L-3] Events for parameter changes
     event MaxSlippageUpdated(uint256 newSlippageBps);
     event CircuitBreakerParamsUpdated(uint256 thresholdBps, uint256 window);
-    // [H-5] Emergency withdrawal events
-    event EmergencyWithdrawRequested(address indexed to, uint256 timestamp);
     event EmergencyWithdrawExecuted(address indexed to);
-    event EmergencyWithdrawCancelled();
 
     // ─── Errors ──────────────────────────────────────────────────────
     error CircuitBreakerActive();
@@ -81,8 +73,6 @@ contract BTCStrategy is IStrategy, AccessControl, ReentrancyGuard {
     error ZeroAmount();
     error ZeroAddress();            // [L-6] Zero address in constructor
     error InvalidParams();          // [L-4, L-5, L-7] Invalid admin parameters
-    error NoEmergencyRequest();     // [H-5] No pending emergency withdrawal
-    error TimelockNotExpired();     // [H-5] Timelock period not elapsed
     error SwapReturnDataInvalid();  // [M-8] Invalid swap return data
 
     /**
@@ -336,33 +326,17 @@ contract BTCStrategy is IStrategy, AccessControl, ReentrancyGuard {
     }
 
     // ═══════════════════════════════════════════════════════════════════
-    //              EMERGENCY WITHDRAW [H-5] — Two-Step Timelock
+    //                     EMERGENCY WITHDRAW
     // ═══════════════════════════════════════════════════════════════════
 
     /**
-     * @notice Step 1: Request emergency withdrawal to a specific address
-     * @dev [H-5] Starts a 24-hour timelock before funds can be moved.
-     *      This prevents instant fund drainage from a single compromised key.
-     * @param to Destination address for the emergency withdrawal
+     * @notice Emergency withdraw all funds to a specified address
+     * @dev Manager can call instantly. Use a multisig for MANAGER_ROLE
+     *      in production to mitigate single-key compromise risk.
+     * @param to Destination address for all strategy funds
      */
-    function requestEmergencyWithdraw(address to) external onlyRole(MANAGER_ROLE) {
+    function emergencyWithdraw(address to) external onlyRole(MANAGER_ROLE) {
         if (to == address(0)) revert ZeroAddress();
-        pendingEmergencyTo = to;
-        emergencyRequestTimestamp = block.timestamp;
-        emit EmergencyWithdrawRequested(to, block.timestamp);
-    }
-
-    /**
-     * @notice Step 2: Execute the pending emergency withdrawal after timelock
-     * @dev Can only be called after EMERGENCY_TIMELOCK has elapsed since the request
-     */
-    function executeEmergencyWithdraw() external onlyRole(MANAGER_ROLE) {
-        if (pendingEmergencyTo == address(0)) revert NoEmergencyRequest();
-        if (block.timestamp < emergencyRequestTimestamp + EMERGENCY_TIMELOCK) revert TimelockNotExpired();
-
-        address to = pendingEmergencyTo;
-        pendingEmergencyTo = address(0);
-        emergencyRequestTimestamp = 0;
 
         // Withdraw all from Aave
         uint256 aaveBalance = aUsdc.balanceOf(address(this));
@@ -386,15 +360,6 @@ contract BTCStrategy is IStrategy, AccessControl, ReentrancyGuard {
         totalCashDeployed = 0;
 
         emit EmergencyWithdrawExecuted(to);
-    }
-
-    /**
-     * @notice Cancel a pending emergency withdrawal request
-     */
-    function cancelEmergencyWithdraw() external onlyRole(MANAGER_ROLE) {
-        pendingEmergencyTo = address(0);
-        emergencyRequestTimestamp = 0;
-        emit EmergencyWithdrawCancelled();
     }
 
     // ═══════════════════════════════════════════════════════════════════

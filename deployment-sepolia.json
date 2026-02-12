@@ -1,0 +1,15 @@
+{
+  "network": "sepolia",
+  "deployer": "0xa41B95daA6e8482c18c5862d339EB47B8B3Cbe4d",
+  "contracts": {
+    "usdc": "0x64c3384fD4EC66f290C06ac3516B61EEE78A7486",
+    "wbtc": "0x45a351616cD7ead03b7f2F916cBDfdc8E77E55b5",
+    "aUsdc": "0x487bE91a323fFE21123B67a3361b010322D01118",
+    "btcUsdFeed": "0xeF06397cFFa12ADD1b0bAB114d646aEd02e74399",
+    "usdcUsdFeed": "0xb9a78abA436e789e554478ECe0c57b7dB517fB83",
+    "vstrcUsdFeed": "0x9793b4E2ac1Bc583659a134D31e0890bcf2D78B2",
+    "vSTRC": "0x201b86F2959478576FCc2318bfB005e059c2f569",
+    "btcStrategy": "0x82f14d44D2B4381bde1F16B70cA794146E798a51"
+  },
+  "timestamp": "2026-02-12T21:19:04.530Z"
+}

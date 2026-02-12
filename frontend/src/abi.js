@@ -30,12 +30,19 @@ export const vSTRC_ABI = [
   "function maxRateBps() view returns (uint256)",
   "function mintingPaused() view returns (bool)",
   "function redeemingPaused() view returns (bool)",
+  "function accumulatedYieldPerShare() view returns (uint256)",
+  "function lastAssetsPerShare() view returns (uint256)",
 
   // Events
   "event Deposit(address indexed sender, address indexed owner, uint256 assets, uint256 shares)",
   "event Withdraw(address indexed sender, address indexed receiver, address indexed owner, uint256 assets, uint256 shares)",
   "event YieldRebalanced(uint256 newRate, uint256 marketPrice, uint256 targetPrice)",
   "event DividendDistributed(uint256 epoch, uint256 amount, uint256 rateBps)",
+  "event DividendFunded(uint256 epoch, uint256 targetAmount, uint256 fundedToVault)",
+  "event DividendParamsUpdated(uint256 baseRate, uint256 sensitivity, uint256 minRate, uint256 maxRate)",
+  "event TargetPriceUpdated(uint256 newTargetPrice)",
+  "event EpochDurationUpdated(uint256 newDuration)",
+  "event DepositCapsUpdated(uint256 maxTotal, uint256 maxSingle, uint256 minDep)",
 ];
 
 export const ERC20_ABI = [

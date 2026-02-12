@@ -64,8 +64,10 @@ contract vSTRC is ERC4626, ERC20Permit, AccessControl, Pausable, ReentrancyGuard
     uint256 public epochCount;
 
     // ─── Accumulated Yield (share price growth) ──────────────────────
-    // [C-2] Now properly tracked — updated each epoch in rebalanceYield()
+    // [C-2] Tracks ACTUAL per-share yield based on totalAssets growth,
+    //       not the theoretical epochDividend target. Updated each epoch.
     uint256 public accumulatedYieldPerShare;      // Scaled by YIELD_PRECISION
+    uint256 public lastAssetsPerShare;            // Snapshot at end of each epoch
     uint256 private constant YIELD_PRECISION = 1e18;
 
     // ─── Circuit Breaker State ───────────────────────────────────────
@@ -81,6 +83,7 @@ contract vSTRC is ERC4626, ERC20Permit, AccessControl, Pausable, ReentrancyGuard
     event StrategyUpdated(address newStrategy);
     event YieldRebalanced(uint256 newRate, uint256 marketPrice, uint256 targetPrice);
     event DividendDistributed(uint256 epoch, uint256 amount, uint256 rateBps);
+    event DividendFunded(uint256 epoch, uint256 targetAmount, uint256 fundedToVault);
     event CircuitBreakerUpdate(bool mintPaused, bool redeemPaused);
     event EpochAdvanced(uint256 epoch, uint256 timestamp);
     event OracleUpdated(address newOracle);
@@ -233,9 +236,22 @@ contract vSTRC is ERC4626, ERC20Permit, AccessControl, Pausable, ReentrancyGuard
      * When price < target: yield increases → attracts deposits → price rises
      * When price > target: yield decreases → reduces demand → price normalizes
      *
-     * [C-2] Dividends are distributed through ERC-4626 share price appreciation:
-     *       yield harvested from strategy increases totalAssets(), which increases
-     *       the share price. accumulatedYieldPerShare tracks the cumulative yield.
+     * [C-2] YIELD DISTRIBUTION MECHANISM (ERC-4626 share price appreciation):
+     *
+     *   In ERC-4626, the share price = totalAssets() / totalSupply(). Yield is
+     *   NOT distributed by minting/transferring tokens — it accrues automatically
+     *   as totalAssets() grows (BTC appreciation + Aave interest) while totalSupply()
+     *   only changes on deposits/withdrawals. When a shareholder redeems, they receive
+     *   proportionally more USDC than they deposited.
+     *
+     *   This function manages the strategy composition to target the VDR:
+     *     1. ALWAYS harvests Aave yield → vault liquidity (every epoch)
+     *     2. When price < target → sells BTC + withdraws from strategy to vault
+     *        to fund the epoch dividend and ensure redemption liquidity
+     *     3. When price > target → deploys vault USDC to strategy (buy more BTC)
+     *
+     *   accumulatedYieldPerShare tracks ACTUAL per-share growth in totalAssets,
+     *   not the theoretical epochDividend target.
      *
      * [H-3] Epoch advances by epochDuration (not block.timestamp) to allow
      *       catch-up of missed epochs without skipping.
@@ -258,43 +274,75 @@ contract vSTRC is ERC4626, ERC20Permit, AccessControl, Pausable, ReentrancyGuard
 
         currentRateBps = newRate;
 
-        // Calculate and distribute epoch dividend
+        // Calculate epoch dividend target
         uint256 _totalAssets = totalAssets();
+        uint256 supply = totalSupply();
         uint256 epochDividend = SelfTuningMath.calculateEpochDividend(
             _totalAssets,
             newRate,
             epochDuration
         );
 
-        // If price is below target and we need to boost yield,
-        // request strategy to sell some BTC or use cash reserve
-        if (marketPrice < targetPrice && epochDividend > 0 && address(strategy) != address(0)) {
-            uint256 cashAvailable = strategy.cashReserveValue();
-            if (epochDividend > cashAvailable) {
-                // Need to liquidate some BTC
-                uint256 btcToSell = epochDividend - cashAvailable;
-                strategy.rebalance(true, btcToSell);
+        // ── Step 1: Track actual yield BEFORE rebalancing ──────────────
+        // Capture the real per-share growth in totalAssets since last epoch.
+        // This reflects ALL actual yield: BTC appreciation + Aave interest.
+        // Deposits/withdrawals between epochs are proportional to both
+        // totalAssets and totalSupply, so per-share value is unaffected.
+        if (supply > 0) {
+            uint256 currentAssetsPerShare = (_totalAssets * YIELD_PRECISION) / supply;
+            if (lastAssetsPerShare > 0 && currentAssetsPerShare > lastAssetsPerShare) {
+                accumulatedYieldPerShare += currentAssetsPerShare - lastAssetsPerShare;
             }
-            // Harvest yield from Aave
+        }
+
+        // ── Step 2: Harvest + rebalance strategy ───────────────────────
+        uint256 fundedToVault = 0;
+
+        if (address(strategy) != address(0)) {
+            // ALWAYS harvest Aave yield — earned interest moves to vault
+            // for liquidity regardless of price direction. Note: this does
+            // NOT change totalAssets() (vault ↑, strategy ↓ by same amount),
+            // but it makes USDC liquid for shareholder redemptions.
             strategy.harvestYield();
-        }
 
-        // If price is above target, accumulate more BTC
-        if (marketPrice > targetPrice && address(strategy) != address(0)) {
-            uint256 vaultBalance = IERC20(asset()).balanceOf(address(this));
-            if (vaultBalance > 0) {
-                // [L-1] Use forceApprove instead of approve
-                IERC20(asset()).forceApprove(address(strategy), vaultBalance);
-                strategy.deploy(vaultBalance);
+            if (marketPrice < targetPrice && epochDividend > 0) {
+                // Price below target → boost yield, ensure vault liquidity
+                // First, make sure strategy has enough liquid USDC
+                uint256 cashAvailable = strategy.cashReserveValue();
+                if (epochDividend > cashAvailable) {
+                    // Sell BTC for USDC within the strategy
+                    uint256 btcToSell = epochDividend - cashAvailable;
+                    strategy.rebalance(true, btcToSell);
+                }
+
+                // Withdraw dividend-equivalent USDC from strategy to vault.
+                // This ensures the vault has liquid USDC for redemptions.
+                // (Zero-sum for totalAssets: vault ↑, strategy ↓)
+                uint256 vaultBefore = IERC20(asset()).balanceOf(address(this));
+                strategy.withdraw(epochDividend);
+                fundedToVault = IERC20(asset()).balanceOf(address(this)) - vaultBefore;
+            } else if (marketPrice > targetPrice) {
+                // Price above target → deploy excess vault USDC to strategy
+                // Still harvested Aave yield above for base liquidity
+                uint256 vaultBalance = IERC20(asset()).balanceOf(address(this));
+                if (vaultBalance > 0) {
+                    IERC20(asset()).forceApprove(address(strategy), vaultBalance);
+                    strategy.deploy(vaultBalance);
+                }
             }
+            // When marketPrice == targetPrice: harvest already ran above,
+            // no additional rebalancing needed — price is at peg.
         }
 
-        // [C-2] Update accumulated yield per share for proper dividend tracking
-        uint256 supply = totalSupply();
-        if (supply > 0 && epochDividend > 0) {
-            accumulatedYieldPerShare += (epochDividend * YIELD_PRECISION) / supply;
+        // ── Step 3: Snapshot post-rebalance share price ────────────────
+        // Store the per-share value AFTER all strategy actions for next
+        // epoch's yield calculation. Uses fresh totalAssets() to capture
+        // any micro-changes from rebalancing.
+        if (supply > 0) {
+            lastAssetsPerShare = (totalAssets() * YIELD_PRECISION) / supply;
         }
 
+        // ── Step 4: Advance epoch ──────────────────────────────────────
         // [H-3] Advance by epochDuration, not block.timestamp, to allow catch-up
         lastEpochTimestamp += epochDuration;
         epochCount++;
@@ -302,6 +350,7 @@ contract vSTRC is ERC4626, ERC20Permit, AccessControl, Pausable, ReentrancyGuard
 
         emit YieldRebalanced(newRate, marketPrice, targetPrice);
         emit DividendDistributed(epochCount, epochDividend, newRate);
+        emit DividendFunded(epochCount, epochDividend, fundedToVault);
         emit EpochAdvanced(epochCount, block.timestamp);
     }
 

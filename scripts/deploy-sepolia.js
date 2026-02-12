@@ -21,7 +21,7 @@ const { ethers } = require("hardhat");
 async function main() {
     const [deployer] = await ethers.getSigners();
     console.log("╔═══════════════════════════════════════════════════╗");
-    console.log("║       vSTRC Protocol — Sepolia Deployment        ║");
+    console.log("║       vSTRC Protocol — Sepolia Deployment         ║");
     console.log("╚═══════════════════════════════════════════════════╝");
     console.log(`Deployer: ${deployer.address}`);
     console.log(`Balance:  ${ethers.formatEther(await ethers.provider.getBalance(deployer.address))} ETH\n`);
