@@ -1,0 +1,190 @@
+.yield-engine {
+  /* inherits .card */
+}
+
+.status-chip {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.status-chip.green {
+  background: var(--green-bg);
+  color: var(--green);
+}
+.status-chip.yellow {
+  background: var(--yellow-bg);
+  color: var(--yellow);
+}
+.status-chip.red {
+  background: var(--red-bg);
+  color: var(--red);
+}
+.status-chip.blue {
+  background: var(--blue-bg);
+  color: var(--blue);
+}
+
+/* Gauge */
+.gauge-container {
+  margin-bottom: 20px;
+}
+
+.gauge-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+}
+
+.gauge-current {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--btc-orange);
+}
+
+.gauge-track {
+  position: relative;
+  height: 8px;
+  background: var(--bg-input);
+  border-radius: 4px;
+  overflow: visible;
+}
+
+.gauge-fill {
+  height: 100%;
+  background: var(--gradient-orange);
+  border-radius: 4px;
+  transition: width 1s ease;
+}
+
+.gauge-marker {
+  position: absolute;
+  top: -4px;
+  width: 2px;
+  height: 16px;
+  background: var(--text-secondary);
+}
+
+.marker-label {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+
+/* Formula */
+.formula-box {
+  background: var(--bg-input);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.formula-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.formula-code {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--btc-orange);
+  font-weight: 500;
+}
+
+/* Parameters */
+.param-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.param-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--bg-input);
+  border-radius: var(--radius-sm);
+}
+
+.param-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.param-value {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
+/* Feedback */
+.feedback-box {
+  border-top: 1px solid var(--border-primary);
+  padding-top: 16px;
+}
+
+.feedback-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.feedback-steps {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.feedback-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-input);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+}
+
+.step-num {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--gradient-orange);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.step-text {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.feedback-arrow {
+  font-size: 16px;
+  color: var(--btc-orange);
+  font-weight: 700;
+}

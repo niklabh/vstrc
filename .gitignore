@@ -1,0 +1,12 @@
+node_modules
+.env
+cache
+artifacts
+coverage
+coverage.json
+typechain
+typechain-types
+.openzeppelin
+frontend/node_modules
+frontend/dist
+frontend/.env

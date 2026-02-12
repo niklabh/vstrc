@@ -1,0 +1,312 @@
+/* ═══════════════════════════════════════════════════════
+   Card Base
+   ═══════════════════════════════════════════════════════ */
+
+.card {
+  background: var(--gradient-card);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-xl);
+  padding: 28px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.panel-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.panel-badge {
+  padding: 4px 10px;
+  background: rgba(247, 147, 26, 0.1);
+  border: 1px solid rgba(247, 147, 26, 0.2);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--btc-orange);
+  font-family: var(--font-mono);
+}
+
+/* ═══════════════════════════════════════════════════════
+   Vault Tabs
+   ═══════════════════════════════════════════════════════ */
+
+.vault-tabs {
+  display: flex;
+  background: var(--bg-input);
+  border-radius: var(--radius-md);
+  padding: 4px;
+  margin-bottom: 20px;
+}
+
+.vault-tab {
+  flex: 1;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: transparent;
+  transition: all 0.2s;
+}
+.vault-tab.active {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+.vault-tab:hover:not(.active) {
+  color: var(--text-primary);
+}
+
+/* ═══════════════════════════════════════════════════════
+   Balances
+   ═══════════════════════════════════════════════════════ */
+
+.vault-balances {
+  background: var(--bg-input);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.balance-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+}
+.balance-row.highlight {
+  border-top: 1px solid var(--border-primary);
+  margin-top: 8px;
+  padding-top: 12px;
+}
+
+.balance-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.balance-value {
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+/* ═══════════════════════════════════════════════════════
+   Input Form
+   ═══════════════════════════════════════════════════════ */
+
+.vault-form {
+  margin-bottom: 20px;
+}
+
+.input-group {
+  margin-bottom: 16px;
+}
+
+.input-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  background: var(--bg-input);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  padding: 4px;
+  transition: border-color 0.2s;
+}
+.input-wrapper:focus-within {
+  border-color: var(--btc-orange);
+}
+
+.vault-input {
+  flex: 1;
+  padding: 14px 16px;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 20px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+.vault-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* Remove number input spinners */
+.vault-input::-webkit-outer-spin-button,
+.vault-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.vault-input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.input-suffix {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 12px;
+}
+
+.max-btn {
+  padding: 4px 10px;
+  background: rgba(247, 147, 26, 0.1);
+  color: var(--btc-orange);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+.max-btn:hover {
+  background: rgba(247, 147, 26, 0.2);
+}
+
+.input-token {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+/* ═══════════════════════════════════════════════════════
+   Preview Box
+   ═══════════════════════════════════════════════════════ */
+
+.preview-box {
+  background: var(--bg-input);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 16px;
+  animation: fadeIn 0.3s ease;
+}
+
+.preview-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.preview-value {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.preview-value.green {
+  color: var(--green);
+}
+
+/* ═══════════════════════════════════════════════════════
+   Transaction Status
+   ═══════════════════════════════════════════════════════ */
+
+.tx-status {
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  animation: fadeIn 0.3s ease;
+}
+.tx-status.success {
+  background: var(--green-bg);
+  color: var(--green);
+  border: 1px solid rgba(0, 214, 143, 0.2);
+}
+.tx-status.error {
+  background: var(--red-bg);
+  color: var(--red);
+  border: 1px solid rgba(255, 77, 106, 0.2);
+}
+
+/* ═══════════════════════════════════════════════════════
+   Submit Button
+   ═══════════════════════════════════════════════════════ */
+
+.submit-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--gradient-orange);
+  color: white;
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  font-weight: 700;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(247, 147, 26, 0.4);
+}
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.submit-btn.loading {
+  pointer-events: none;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Info Section
+   ═══════════════════════════════════════════════════════ */
+
+.vault-info {
+  border-top: 1px solid var(--border-primary);
+  padding-top: 16px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.info-row .green {
+  color: var(--green);
+  font-weight: 600;
+}
+.info-row .red {
+  color: var(--red);
+  font-weight: 600;
+}
+.info-row .mono {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
