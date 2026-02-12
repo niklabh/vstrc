@@ -28,7 +28,7 @@ function Footer() {
             <h4 className="footer-col-title">Resources</h4>
             <a href="/whitepaper.pdf" target="_blank">Whitepaper</a>
             <a href="https://github.com/niklabh/vstrc" target="_blank" rel="noopener">GitHub</a>
-            <a href="https://sepolia.etherscan.io" target="_blank" rel="noopener">Etherscan</a>
+            <a href="https://sepolia.etherscan.io/address/0x201b86F2959478576FCc2318bfB005e059c2f569" target="_blank" rel="noopener">Etherscan</a>
           </div>
           <div className="footer-col">
             <h4 className="footer-col-title">Standards</h4>
@@ -41,10 +41,7 @@ function Footer() {
       </div>
 
       <div className="footer-bottom">
-        <p>&copy; 2026 vSTRC Protocol. For educational purposes only. Not audited.</p>
-        <p className="footer-disclaimer">
-          This is experimental software. Do not use with real funds without a comprehensive security audit.
-        </p>
+        <p>&copy; 2026 vSTRC Protocol.</p>
       </div>
     </footer>
   );
