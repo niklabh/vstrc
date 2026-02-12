@@ -66,7 +66,7 @@ function App() {
     redeemingPaused: false,
     btcTreasuryValue: '9967146',
     cashReserveValue: '2491786',
-    btcPrice: '66047',
+    btcPrice: '97000',
   };
 
   // ─── Connect Wallet ──────────────────────────────────

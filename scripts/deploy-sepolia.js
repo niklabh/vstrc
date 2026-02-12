@@ -92,29 +92,19 @@ async function main() {
     console.log(`  vSTRC Vault: ${await vault.getAddress()}`);
 
     // ────────────────────────────────────────────────────────────────
-    // Step 4: Deploy BTC Strategy
+    // Step 4: Deploy Strategy
     // ────────────────────────────────────────────────────────────────
-    console.log("\n⚡ Deploying BTC Strategy...");
+    // On testnet, use MockStrategy (BTCStrategy needs real Uniswap/Aave).
+    // On mainnet, deploy BTCStrategy with real protocol addresses.
+    console.log("\n⚡ Deploying MockStrategy (testnet)...");
 
-    // For Sepolia, we use a mock router and pool address
-    // In production, these would be Uniswap V3 Router and Aave V3 Pool
-    const MOCK_UNISWAP_ROUTER = "0x0000000000000000000000000000000000000001";
-    const MOCK_AAVE_POOL = "0x0000000000000000000000000000000000000002";
-
-    const BTCStrategy = await ethers.getContractFactory("BTCStrategy");
-    const strategy = await BTCStrategy.deploy(
+    const MockStrategy = await ethers.getContractFactory("MockStrategy");
+    const strategy = await MockStrategy.deploy(
         await usdc.getAddress(),
-        await wbtc.getAddress(),
-        await aUsdc.getAddress(),
-        await btcFeed.getAddress(),
-        await usdcFeed.getAddress(),
-        MOCK_UNISWAP_ROUTER,
-        MOCK_AAVE_POOL,
-        await vault.getAddress(),
-        deployer.address
+        await vault.getAddress()
     );
     await strategy.waitForDeployment();
-    console.log(`  BTCStrategy: ${await strategy.getAddress()}`);
+    console.log(`  MockStrategy: ${await strategy.getAddress()}`);
 
     // ────────────────────────────────────────────────────────────────
     // Step 5: Configure Protocol

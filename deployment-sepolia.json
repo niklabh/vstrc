@@ -9,7 +9,8 @@
     "usdcUsdFeed": "0xb9a78abA436e789e554478ECe0c57b7dB517fB83",
     "vstrcUsdFeed": "0x9793b4E2ac1Bc583659a134D31e0890bcf2D78B2",
     "vSTRC": "0x201b86F2959478576FCc2318bfB005e059c2f569",
-    "btcStrategy": "0x82f14d44D2B4381bde1F16B70cA794146E798a51"
+    "btcStrategy": "0xaE825a1201c678668dc09eBBb9D413fE9763caa9",
+    "_note": "Using MockStrategy for testnet (BTCStrategy needs real Uniswap/Aave)"
   },
   "timestamp": "2026-02-12T21:19:04.530Z"
 }
