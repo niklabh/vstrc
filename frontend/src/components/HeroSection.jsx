@@ -51,7 +51,7 @@ function HeroSection() {
               <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </a>
-          <a href="https://github.com" className="btn-secondary" target="_blank" rel="noopener">
+          <a href="https://github.com/niklabh/vstrc" className="btn-secondary" target="_blank" rel="noopener">
             Read Whitepaper
           </a>
         </div>

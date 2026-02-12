@@ -2,6 +2,10 @@
 
 > A Bitcoin-backed, yield-bearing DeFi token inspired by MicroStrategy's STRC preferred stock, targeting a stable $100 peg through a self-tuning variable dividend rate.
 
+[![GitHub](https://img.shields.io/badge/GitHub-niklabh%2Fvstrc-orange?logo=github)](https://github.com/niklabh/vstrc)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Solidity](https://img.shields.io/badge/Solidity-0.8.20-blue?logo=solidity)](https://soliditylang.org/)
+
 <p align="center">
   <img src="frontend/public/logo.svg" alt="vSTRC Logo" width="120" />
 </p>
@@ -39,7 +43,7 @@ This mirrors the real-world mechanics of MicroStrategy's STRC preferred stock, w
 
 ```
 ┌──────────────┐       deposit USDC       ┌─────────────────┐
-│              │ ──────────────────────→   │                 │
+│              │ ──────────────────────→  │                 │
 │   Users      │                          │   vSTRC Vault   │
 │              │ ←──────────────────────  │   (ERC-4626)    │
 └──────────────┘     redeem for USDC      └────────┬────────┘
@@ -47,26 +51,26 @@ This mirrors the real-world mechanics of MicroStrategy's STRC preferred stock, w
                                           deploy / withdraw
                                                    │
                                           ┌────────▼────────┐
-                                          │  BTC Strategy    │
-                                          │                  │
-                                          │  ┌────────────┐  │
-                                          │  │ 80% → WBTC │  │  ← Uniswap V3
-                                          │  │ (Treasury) │  │  ← Chainlink BTC/USD
-                                          │  └────────────┘  │
-                                          │  ┌────────────┐  │
-                                          │  │ 20% → Aave │  │  ← Aave V3 Lending
-                                          │  │ (Cash Rsv) │  │
-                                          │  └────────────┘  │
+                                          │  BTC Strategy   │
+                                          │                 │
+                                          │  ┌────────────┐ │
+                                          │  │ 80% → WBTC │ │  ← Uniswap V3
+                                          │  │ (Treasury) │ │  ← Chainlink BTC/USD
+                                          │  └────────────┘ │
+                                          │  ┌────────────┐ │
+                                          │  │ 20% → Aave │ │  ← Aave V3 Lending
+                                          │  │ (Cash Rsv) │ │
+                                          │  └────────────┘ │
                                           └─────────────────┘
                                                    │
-                                          ┌────────▼────────┐
-                                          │  Self-Tuning    │
+                                          ┌────────▼─────────┐
+                                          │  Self-Tuning     │
                                           │  Dividend Engine │
                                           │                  │
                                           │  Epoch: Weekly   │
                                           │  Oracle: vSTRC   │
                                           │  Rate: Variable  │
-                                          └─────────────────┘
+                                          └──────────────────┘
 ```
 
 ### Component Flow
@@ -226,7 +230,7 @@ If BTC price drops more than **20% within 1 hour**, the strategy contract automa
 ### Installation
 
 ```bash
-git clone https://github.com/your-org/vSTRC.git
+git clone https://github.com/niklabh/vstrc.git
 cd vSTRC
 npm install
 ```
@@ -300,9 +304,16 @@ See the [frontend README](frontend/README.md) for details.
 
 ---
 
+## Links
+
+- **GitHub**: [https://github.com/niklabh/vstrc](https://github.com/niklabh/vstrc)
+- **Whitepaper**: [docs/WHITEPAPER.md](docs/WHITEPAPER.md)
+
+---
+
 ## License
 
-MIT
+[MIT](LICENSE)
 
 ---
 

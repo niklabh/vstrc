@@ -4,6 +4,8 @@
 
 **Version 1.0 — February 2026**
 
+**Author: Nikhil Ranjan ([@niklabh](https://github.com/niklabh))**
+
 ---
 
 ## Abstract
@@ -52,9 +54,9 @@ Unlike STRC's fixed 10% dividend, vSTRC employs a **variable dividend rate** tha
 ### 2.1 System Overview
 
 ```
-                    ┌───────────────────────────────────────┐
-                    │           vSTRC Protocol               │
-                    │                                       │
+                    ┌──────────────────────────────────────┐
+                    │           vSTRC Protocol             │
+                    │                                      │
     Deposit USDC    │  ┌────────────┐   ┌──────────────┐   │
    ──────────────→  │  │            │   │              │   │
                     │  │  vSTRC     │──→│ BTCStrategy  │   │
@@ -68,12 +70,12 @@ Unlike STRC's fixed 10% dividend, vSTRC employs a **variable dividend rate** tha
                     │        │          │ │ (Cash)   │ │   │
                     │        ▼          │ └──────────┘ │   │
                     │  ┌────────────┐   └──────────────┘   │
-                    │  │ Self-Tuning│                       │
+                    │  │ Self-Tuning│                      │
                     │  │ Dividend   │   ┌──────────────┐   │
                     │  │ Engine     │──→│ Chainlink    │   │
                     │  │ (VDR)      │   │ Oracles      │   │
                     │  └────────────┘   └──────────────┘   │
-                    └───────────────────────────────────────┘
+                    └──────────────────────────────────────┘
 ```
 
 ### 2.2 Token Standard

@@ -28,6 +28,7 @@ function Header({ account, chainId, onConnect }) {
           <a href="#yield" className="nav-link">Yield</a>
           <a href="#treasury" className="nav-link">Treasury</a>
           <a href="#how-it-works" className="nav-link">Docs</a>
+          <a href="/whitepaper.pdf" className="nav-link" target="_blank" rel="noopener">Whitepaper</a>
         </nav>
 
         <div className="header-actions">

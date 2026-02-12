@@ -26,8 +26,8 @@ function Footer() {
           </div>
           <div className="footer-col">
             <h4 className="footer-col-title">Resources</h4>
-            <a href="/docs/WHITEPAPER.md" target="_blank">Whitepaper</a>
-            <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+            <a href="/whitepaper.pdf" target="_blank">Whitepaper</a>
+            <a href="https://github.com/niklabh/vstrc" target="_blank" rel="noopener">GitHub</a>
             <a href="https://sepolia.etherscan.io" target="_blank" rel="noopener">Etherscan</a>
           </div>
           <div className="footer-col">
