@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ethers } from 'ethers';
 import { vSTRC_ABI, ERC20_ABI } from './abi';
+import config from './config';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import StatsBar from './components/StatsBar';
@@ -11,9 +12,6 @@ import HowItWorks from './components/HowItWorks';
 import Footer from './components/Footer';
 import './App.css';
 
-// Default addresses (update after deployment)
-const DEFAULT_VAULT_ADDRESS = '0x0000000000000000000000000000000000000000';
-
 function App() {
   // Wallet state
   const [provider, setProvider] = useState(null);
@@ -22,7 +20,7 @@ function App() {
   const [chainId, setChainId] = useState(null);
 
   // Contract state
-  const [vaultAddress, setVaultAddress] = useState(DEFAULT_VAULT_ADDRESS);
+  const [vaultAddress, setVaultAddress] = useState(config.vaultAddress);
   const [vaultContract, setVaultContract] = useState(null);
   const [usdcContract, setUsdcContract] = useState(null);
 
@@ -68,7 +66,7 @@ function App() {
     redeemingPaused: false,
     btcTreasuryValue: '9967146',
     cashReserveValue: '2491786',
-    btcPrice: '97234',
+    btcPrice: '66047',
   };
 
   // ─── Connect Wallet ──────────────────────────────────
@@ -91,7 +89,7 @@ function App() {
       setDemoMode(false);
 
       // Setup contract instances
-      if (vaultAddress !== DEFAULT_VAULT_ADDRESS) {
+      if (config.isConfigured) {
         const vault = new ethers.Contract(vaultAddress, vSTRC_ABI, signer);
         setVaultContract(vault);
 

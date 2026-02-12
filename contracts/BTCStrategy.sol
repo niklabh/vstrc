@@ -51,6 +51,11 @@ contract BTCStrategy is IStrategy, AccessControl, ReentrancyGuard {
     uint256 public circuitBreakerWindow = 1 hours;
     bool public circuitBreakerTripped;
 
+    // ─── Emergency Withdrawal Timelock [H-5] ─────────────────────────
+    address public pendingEmergencyTo;
+    uint256 public emergencyRequestTimestamp;
+    uint256 public constant EMERGENCY_TIMELOCK = 24 hours;
+
     // ─── Events ──────────────────────────────────────────────────────
     event Deployed(uint256 usdcAmount, uint256 btcBought, uint256 cashDeployed);
     event Withdrawn(uint256 usdcRequested, uint256 usdcReturned);
@@ -59,14 +64,30 @@ contract BTCStrategy is IStrategy, AccessControl, ReentrancyGuard {
     event CircuitBreakerReset();
     event YieldHarvested(uint256 amount);
     event AllocationUpdated(uint256 btcBps, uint256 cashBps);
+    // [L-3] Events for parameter changes
+    event MaxSlippageUpdated(uint256 newSlippageBps);
+    event CircuitBreakerParamsUpdated(uint256 thresholdBps, uint256 window);
+    // [H-5] Emergency withdrawal events
+    event EmergencyWithdrawRequested(address indexed to, uint256 timestamp);
+    event EmergencyWithdrawExecuted(address indexed to);
+    event EmergencyWithdrawCancelled();
 
     // ─── Errors ──────────────────────────────────────────────────────
     error CircuitBreakerActive();
     error InvalidAllocation();
     error InsufficientCashReserve();
     error StalePrice();
+    error InvalidPrice();           // [C-1] Oracle returned non-positive price
     error ZeroAmount();
+    error ZeroAddress();            // [L-6] Zero address in constructor
+    error InvalidParams();          // [L-4, L-5, L-7] Invalid admin parameters
+    error NoEmergencyRequest();     // [H-5] No pending emergency withdrawal
+    error TimelockNotExpired();     // [H-5] Timelock period not elapsed
+    error SwapReturnDataInvalid();  // [M-8] Invalid swap return data
 
+    /**
+     * @dev [L-6] All constructor parameters are validated against zero address
+     */
     constructor(
         address _usdc,
         address _wbtc,
@@ -78,6 +99,17 @@ contract BTCStrategy is IStrategy, AccessControl, ReentrancyGuard {
         address _vault,
         address _manager
     ) {
+        // [L-6] Zero-address checks for all parameters
+        if (_usdc == address(0)) revert ZeroAddress();
+        if (_wbtc == address(0)) revert ZeroAddress();
+        if (_aUsdc == address(0)) revert ZeroAddress();
+        if (_btcUsdFeed == address(0)) revert ZeroAddress();
+        if (_usdcUsdFeed == address(0)) revert ZeroAddress();
+        if (_uniswapRouter == address(0)) revert ZeroAddress();
+        if (_aavePool == address(0)) revert ZeroAddress();
+        if (_vault == address(0)) revert ZeroAddress();
+        if (_manager == address(0)) revert ZeroAddress();
+
         usdc = IERC20(_usdc);
         wbtc = IERC20(_wbtc);
         aUsdc = IERC20(_aUsdc);
@@ -280,107 +312,58 @@ contract BTCStrategy is IStrategy, AccessControl, ReentrancyGuard {
         emit AllocationUpdated(_btcBps, _cashBps);
     }
 
+    /**
+     * @notice Set maximum slippage for Uniswap swaps
+     * @dev [L-4] Capped at 1000 bps (10%) to prevent disabling slippage protection
+     */
     function setMaxSlippage(uint256 _slippageBps) external onlyRole(MANAGER_ROLE) {
+        if (_slippageBps > 1000) revert InvalidParams(); // [L-4] Max 10%
         maxSlippageBps = _slippageBps;
+        emit MaxSlippageUpdated(_slippageBps); // [L-3]
     }
 
+    /**
+     * @notice Set circuit breaker parameters
+     * @dev [L-5] Window minimum is 5 minutes to prevent effective disabling
+     * @dev [L-7] Threshold bounded: 0 < threshold <= 5000 (50%)
+     */
     function setCircuitBreakerParams(uint256 _thresholdBps, uint256 _window) external onlyRole(MANAGER_ROLE) {
+        if (_thresholdBps == 0 || _thresholdBps > 5000) revert InvalidParams(); // [L-7]
+        if (_window < 5 minutes) revert InvalidParams(); // [L-5]
         circuitBreakerThresholdBps = _thresholdBps;
         circuitBreakerWindow = _window;
+        emit CircuitBreakerParamsUpdated(_thresholdBps, _window); // [L-3]
     }
 
     // ═══════════════════════════════════════════════════════════════════
-    //                     INTERNAL FUNCTIONS
+    //              EMERGENCY WITHDRAW [H-5] — Two-Step Timelock
     // ═══════════════════════════════════════════════════════════════════
 
-    function _getBtcPrice() internal view returns (uint256) {
-        (, int256 price, , uint256 updatedAt, ) = btcUsdPriceFeed.latestRoundData();
-        if (block.timestamp - updatedAt > 3600) revert StalePrice();
-        return uint256(price);
-    }
-
-    function _getUsdcPrice() internal view returns (uint256) {
-        (, int256 price, , uint256 updatedAt, ) = usdcUsdPriceFeed.latestRoundData();
-        if (block.timestamp - updatedAt > 86400) revert StalePrice();
-        return uint256(price);
+    /**
+     * @notice Step 1: Request emergency withdrawal to a specific address
+     * @dev [H-5] Starts a 24-hour timelock before funds can be moved.
+     *      This prevents instant fund drainage from a single compromised key.
+     * @param to Destination address for the emergency withdrawal
+     */
+    function requestEmergencyWithdraw(address to) external onlyRole(MANAGER_ROLE) {
+        if (to == address(0)) revert ZeroAddress();
+        pendingEmergencyTo = to;
+        emergencyRequestTimestamp = block.timestamp;
+        emit EmergencyWithdrawRequested(to, block.timestamp);
     }
 
     /**
-     * @notice Swap USDC → WBTC via Uniswap V3 exactInputSingle
-     * @dev Encodes the call manually to avoid import conflicts
+     * @notice Step 2: Execute the pending emergency withdrawal after timelock
+     * @dev Can only be called after EMERGENCY_TIMELOCK has elapsed since the request
      */
-    function _swapUsdcToWbtc(uint256 usdcAmount) internal returns (uint256 wbtcReceived) {
-        usdc.safeIncreaseAllowance(uniswapRouter, usdcAmount);
+    function executeEmergencyWithdraw() external onlyRole(MANAGER_ROLE) {
+        if (pendingEmergencyTo == address(0)) revert NoEmergencyRequest();
+        if (block.timestamp < emergencyRequestTimestamp + EMERGENCY_TIMELOCK) revert TimelockNotExpired();
 
-        // Calculate minimum output with slippage protection
-        uint256 btcPrice = _getBtcPrice();
-        uint256 expectedWbtc = (usdcAmount * 1e8 * 1e2) / btcPrice; // USDC 6 dec → WBTC 8 dec
-        uint256 minOut = (expectedWbtc * (10000 - maxSlippageBps)) / 10000;
+        address to = pendingEmergencyTo;
+        pendingEmergencyTo = address(0);
+        emergencyRequestTimestamp = 0;
 
-        // ISwapRouter.ExactInputSingleParams
-        bytes memory data = abi.encodeWithSignature(
-            "exactInputSingle((address,address,uint24,address,uint256,uint256,uint256,uint160))",
-            address(usdc),
-            address(wbtc),
-            uniswapPoolFee,
-            address(this),
-            block.timestamp + 300,
-            usdcAmount,
-            minOut,
-            0 // sqrtPriceLimitX96
-        );
-
-        (bool success, bytes memory result) = uniswapRouter.call(data);
-        require(success, "Uniswap swap failed");
-        wbtcReceived = abi.decode(result, (uint256));
-    }
-
-    /**
-     * @notice Swap WBTC → USDC via Uniswap V3
-     * @param usdcAmountNeeded Amount of USDC needed
-     */
-    function _swapWbtcToUsdc(uint256 usdcAmountNeeded) internal returns (uint256 usdcReceived) {
-        uint256 btcPrice = _getBtcPrice();
-        // Estimate WBTC needed: usdcNeeded * 1e2 / btcPrice (accounting for decimal differences)
-        uint256 wbtcNeeded = (usdcAmountNeeded * 1e2 * 1e8) / btcPrice;
-        uint256 maxWbtcIn = (wbtcNeeded * (10000 + maxSlippageBps)) / 10000;
-
-        if (maxWbtcIn > totalWbtcHeld) maxWbtcIn = totalWbtcHeld;
-
-        wbtc.safeIncreaseAllowance(uniswapRouter, maxWbtcIn);
-
-        bytes memory data = abi.encodeWithSignature(
-            "exactOutputSingle((address,address,uint24,address,uint256,uint256,uint256,uint160))",
-            address(wbtc),
-            address(usdc),
-            uniswapPoolFee,
-            address(this),
-            block.timestamp + 300,
-            usdcAmountNeeded,
-            maxWbtcIn,
-            0
-        );
-
-        (bool success, bytes memory result) = uniswapRouter.call(data);
-        require(success, "Uniswap swap failed");
-        uint256 wbtcUsed = abi.decode(result, (uint256));
-        totalWbtcHeld -= wbtcUsed;
-        usdcReceived = usdcAmountNeeded;
-    }
-
-    function _depositToAave(uint256 amount) internal {
-        usdc.safeIncreaseAllowance(address(aavePool), amount);
-        aavePool.supply(address(usdc), amount, address(this), 0);
-    }
-
-    function _withdrawFromAave(uint256 amount) internal returns (uint256) {
-        return aavePool.withdraw(address(usdc), amount, address(this));
-    }
-
-    /**
-     * @notice Emergency withdraw all funds (manager only)
-     */
-    function emergencyWithdraw(address to) external onlyRole(MANAGER_ROLE) {
         // Withdraw all from Aave
         uint256 aaveBalance = aUsdc.balanceOf(address(this));
         if (aaveBalance > 0) {
@@ -401,5 +384,138 @@ contract BTCStrategy is IStrategy, AccessControl, ReentrancyGuard {
 
         totalWbtcHeld = 0;
         totalCashDeployed = 0;
+
+        emit EmergencyWithdrawExecuted(to);
+    }
+
+    /**
+     * @notice Cancel a pending emergency withdrawal request
+     */
+    function cancelEmergencyWithdraw() external onlyRole(MANAGER_ROLE) {
+        pendingEmergencyTo = address(0);
+        emergencyRequestTimestamp = 0;
+        emit EmergencyWithdrawCancelled();
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    //                     INTERNAL FUNCTIONS
+    // ═══════════════════════════════════════════════════════════════════
+
+    /**
+     * @dev [C-1] Validates oracle price is positive to prevent uint256 wraparound.
+     *      A negative Chainlink price cast to uint256 would become ~2^256,
+     *      breaking all valuation logic.
+     */
+    function _getBtcPrice() internal view returns (uint256) {
+        (, int256 price, , uint256 updatedAt, ) = btcUsdPriceFeed.latestRoundData();
+        if (price <= 0) revert InvalidPrice(); // [C-1]
+        if (block.timestamp - updatedAt > 3600) revert StalePrice();
+        return uint256(price);
+    }
+
+    /**
+     * @dev [C-1] Validates oracle price is positive
+     */
+    function _getUsdcPrice() internal view returns (uint256) {
+        (, int256 price, , uint256 updatedAt, ) = usdcUsdPriceFeed.latestRoundData();
+        if (price <= 0) revert InvalidPrice(); // [C-1]
+        if (block.timestamp - updatedAt > 86400) revert StalePrice();
+        return uint256(price);
+    }
+
+    /**
+     * @notice Swap USDC → WBTC via Uniswap V3 exactInputSingle
+     * @dev [H-2] Uses forceApprove instead of safeIncreaseAllowance to prevent
+     *      stale allowance accumulation on failed swaps.
+     *      [M-8] Validates return data length before decoding.
+     *      [H-1] Explicit output validation after swap.
+     *      Resets allowance to 0 after swap for defense in depth.
+     */
+    function _swapUsdcToWbtc(uint256 usdcAmount) internal returns (uint256 wbtcReceived) {
+        usdc.forceApprove(uniswapRouter, usdcAmount); // [H-2]
+
+        // Calculate minimum output with slippage protection
+        uint256 btcPrice = _getBtcPrice();
+        uint256 expectedWbtc = (usdcAmount * 1e8 * 1e2) / btcPrice; // USDC 6 dec → WBTC 8 dec
+        uint256 minOut = (expectedWbtc * (10000 - maxSlippageBps)) / 10000;
+
+        // ISwapRouter.ExactInputSingleParams
+        bytes memory data = abi.encodeWithSignature(
+            "exactInputSingle((address,address,uint24,address,uint256,uint256,uint256,uint160))",
+            address(usdc),
+            address(wbtc),
+            uniswapPoolFee,
+            address(this),
+            block.timestamp + 300,
+            usdcAmount,
+            minOut,
+            0 // sqrtPriceLimitX96
+        );
+
+        (bool success, bytes memory result) = uniswapRouter.call(data);
+        if (!success || result.length < 32) revert SwapReturnDataInvalid(); // [M-8]
+        wbtcReceived = abi.decode(result, (uint256));
+        require(wbtcReceived >= minOut, "Insufficient WBTC output"); // [H-1] Explicit check
+
+        // [H-2] Reset allowance after swap to prevent stale accumulation
+        usdc.forceApprove(uniswapRouter, 0);
+    }
+
+    /**
+     * @notice Swap WBTC → USDC via Uniswap V3
+     * @param usdcAmountNeeded Amount of USDC needed
+     * @dev [C-3] Validates actual USDC received by checking balance delta,
+     *      instead of returning the hardcoded usdcAmountNeeded value.
+     *      [H-2] Uses forceApprove and resets after swap.
+     *      [M-8] Validates return data from low-level call.
+     */
+    function _swapWbtcToUsdc(uint256 usdcAmountNeeded) internal returns (uint256 usdcReceived) {
+        uint256 btcPrice = _getBtcPrice();
+        // Estimate WBTC needed: usdcNeeded * 1e2 / btcPrice (accounting for decimal differences)
+        uint256 wbtcNeeded = (usdcAmountNeeded * 1e2 * 1e8) / btcPrice;
+        uint256 maxWbtcIn = (wbtcNeeded * (10000 + maxSlippageBps)) / 10000;
+
+        if (maxWbtcIn > totalWbtcHeld) maxWbtcIn = totalWbtcHeld;
+
+        wbtc.forceApprove(uniswapRouter, maxWbtcIn); // [H-2]
+
+        // [C-3] Track USDC balance before swap to verify actual amount received
+        uint256 usdcBefore = usdc.balanceOf(address(this));
+
+        bytes memory data = abi.encodeWithSignature(
+            "exactOutputSingle((address,address,uint24,address,uint256,uint256,uint256,uint160))",
+            address(wbtc),
+            address(usdc),
+            uniswapPoolFee,
+            address(this),
+            block.timestamp + 300,
+            usdcAmountNeeded,
+            maxWbtcIn,
+            0
+        );
+
+        (bool success, bytes memory result) = uniswapRouter.call(data);
+        if (!success || result.length < 32) revert SwapReturnDataInvalid(); // [M-8]
+        uint256 wbtcUsed = abi.decode(result, (uint256));
+        totalWbtcHeld -= wbtcUsed;
+
+        // [C-3] Verify actual USDC received from balance delta
+        usdcReceived = usdc.balanceOf(address(this)) - usdcBefore;
+
+        // [H-2] Reset allowance after swap
+        wbtc.forceApprove(uniswapRouter, 0);
+    }
+
+    /**
+     * @dev [H-2] Uses forceApprove and resets after deposit
+     */
+    function _depositToAave(uint256 amount) internal {
+        usdc.forceApprove(address(aavePool), amount); // [H-2]
+        aavePool.supply(address(usdc), amount, address(this), 0);
+        usdc.forceApprove(address(aavePool), 0); // [H-2] Reset allowance
+    }
+
+    function _withdrawFromAave(uint256 amount) internal returns (uint256) {
+        return aavePool.withdraw(address(usdc), amount, address(this));
     }
 }

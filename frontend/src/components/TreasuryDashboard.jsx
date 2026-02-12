@@ -102,7 +102,7 @@ function TreasuryDashboard({ data, demoMode }) {
       <div className="btc-price-box">
         <span className="btc-price-label">BTC Price</span>
         <span className="btc-price-value">
-          ${parseFloat(data.btcPrice || 97234).toLocaleString()}
+          ${parseFloat(data.btcPrice || 66047).toLocaleString()}
         </span>
         <span className="btc-price-source">Chainlink BTC/USD</span>
       </div>

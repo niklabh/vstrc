@@ -308,6 +308,7 @@ See the [frontend README](frontend/README.md) for details.
 
 - **GitHub**: [https://github.com/niklabh/vstrc](https://github.com/niklabh/vstrc)
 - **Whitepaper**: [docs/WHITEPAPER.md](docs/WHITEPAPER.md)
+- **Deployment Guide**: [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md)
 
 ---
 
