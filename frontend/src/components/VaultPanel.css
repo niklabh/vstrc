@@ -7,6 +7,17 @@
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-xl);
   padding: 28px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(2, 8, 24, 0.3);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(125deg, rgba(247, 147, 26, 0.08), transparent 36%, rgba(0, 215, 255, 0.06));
+  pointer-events: none;
 }
 
 .panel-header {
@@ -14,6 +25,8 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
 }
 
 .panel-title {
@@ -43,6 +56,8 @@
   border-radius: var(--radius-md);
   padding: 4px;
   margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 .vault-tab {
@@ -73,6 +88,8 @@
   border-radius: var(--radius-md);
   padding: 16px;
   margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 .balance-row {
@@ -104,6 +121,8 @@
 
 .vault-form {
   margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 .input-group {
@@ -281,6 +300,8 @@
 .vault-info {
   border-top: 1px solid var(--border-primary);
   padding-top: 16px;
+  position: relative;
+  z-index: 1;
 }
 
 .info-row {

@@ -10,15 +10,16 @@
 .section-badge {
   display: inline-block;
   padding: 6px 16px;
-  background: rgba(247, 147, 26, 0.1);
-  border: 1px solid rgba(247, 147, 26, 0.2);
+  background: linear-gradient(90deg, rgba(247, 147, 26, 0.12), rgba(0, 215, 255, 0.08));
+  border: 1px solid rgba(77, 166, 255, 0.22);
   border-radius: 100px;
   font-size: 12px;
   font-weight: 600;
-  color: var(--btc-orange);
+  color: #a7d7ff;
   margin-bottom: 16px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
+  font-family: var(--font-mono);
 }
 
 .section-title {
@@ -57,7 +58,7 @@
 .step-card:nth-child(4) { animation-delay: 0.4s; }
 
 .step-card:hover {
-  border-color: var(--border-accent);
+  border-color: rgba(0, 215, 255, 0.24);
   transform: translateY(-4px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
 }
@@ -70,7 +71,33 @@
 }
 
 .step-icon {
-  font-size: 32px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--btc-orange);
+  background: rgba(247, 147, 26, 0.08);
+  border: 1px solid rgba(247, 147, 26, 0.24);
+  flex-shrink: 0;
+}
+
+.step-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.step-icon.blue {
+  color: var(--blue);
+  background: var(--blue-bg);
+  border-color: rgba(77, 166, 255, 0.26);
+}
+
+.step-icon.green {
+  color: var(--green);
+  background: var(--green-bg);
+  border-color: rgba(0, 214, 143, 0.26);
 }
 
 .step-number {

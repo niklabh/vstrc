@@ -12,13 +12,15 @@
   align-items: center;
   gap: 8px;
   padding: 6px 16px;
-  background: rgba(247, 147, 26, 0.1);
-  border: 1px solid rgba(247, 147, 26, 0.2);
+  background: linear-gradient(90deg, rgba(247, 147, 26, 0.12), rgba(0, 215, 255, 0.08));
+  border: 1px solid rgba(77, 166, 255, 0.22);
   border-radius: 100px;
   font-size: 13px;
   font-weight: 600;
-  color: var(--btc-orange);
+  color: #a7d7ff;
   margin-bottom: 24px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.2px;
 }
 
 .hero-badge-dot {
@@ -39,7 +41,7 @@
 
 .hero-subtitle {
   font-size: 17px;
-  color: var(--text-secondary);
+  color: #95a4c4;
   line-height: 1.7;
   margin-bottom: 40px;
   max-width: 520px;
@@ -104,6 +106,12 @@
   color: white;
 }
 
+.btn-primary svg,
+.btn-secondary svg {
+  width: 16px;
+  height: 16px;
+}
+
 .btn-secondary {
   display: inline-flex;
   align-items: center;
@@ -119,7 +127,7 @@
   text-decoration: none;
 }
 .btn-secondary:hover {
-  border-color: var(--btc-orange);
+  border-color: var(--cypher-cyan);
   color: var(--text-primary);
 }
 
@@ -133,7 +141,7 @@
 
 .orbit-ring {
   position: absolute;
-  border: 1px solid var(--border-primary);
+  border: 1px dashed rgba(130, 163, 214, 0.34);
   border-radius: 50%;
 }
 
@@ -150,6 +158,7 @@
   height: 220px;
   top: 90px;
   left: 90px;
+  border-color: rgba(0, 215, 255, 0.4);
   animation: spin 15s linear infinite reverse;
 }
 
@@ -185,13 +194,14 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background: var(--gradient-card);
-  border: 2px solid var(--border-accent);
+  border: 2px solid rgba(247, 147, 26, 0.45);
   border-radius: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   animation: glow 3s ease-in-out infinite;
+  box-shadow: inset 0 0 24px rgba(0, 215, 255, 0.08);
 }
 
 .orbit-label {

@@ -1,5 +1,5 @@
 .footer {
-  border-top: 1px solid var(--border-primary);
+  border-top: 1px solid rgba(77, 166, 255, 0.2);
   margin-top: 64px;
 }
 
@@ -30,7 +30,7 @@
 
 .footer-tagline {
   font-size: 14px;
-  color: var(--text-secondary);
+  color: #90a2c5;
   line-height: 1.6;
 }
 
@@ -49,10 +49,11 @@
 .footer-col-title {
   font-size: 13px;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #a7d7ff;
   margin-bottom: 4px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
+  font-family: var(--font-mono);
 }
 
 .footer-col a {
@@ -62,14 +63,14 @@
   text-decoration: none;
 }
 .footer-col a:hover {
-  color: var(--btc-orange);
+  color: var(--cypher-cyan);
 }
 
 .footer-bottom {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 20px 24px;
-  border-top: 1px solid var(--border-primary);
+  border-top: 1px solid rgba(77, 166, 255, 0.15);
   text-align: center;
 }
 

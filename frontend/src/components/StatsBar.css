@@ -56,7 +56,39 @@
 }
 
 .stat-icon {
-  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(247, 147, 26, 0.2);
+  background: rgba(247, 147, 26, 0.08);
+  color: var(--btc-orange);
+  flex-shrink: 0;
+}
+
+.stat-icon .icon-svg {
+  width: 20px;
+  height: 20px;
+}
+
+.stat-icon.green {
+  color: var(--green);
+  border-color: rgba(0, 214, 143, 0.25);
+  background: var(--green-bg);
+}
+
+.stat-icon.red {
+  color: var(--red);
+  border-color: rgba(255, 77, 106, 0.25);
+  background: var(--red-bg);
+}
+
+.stat-icon.blue {
+  color: var(--blue);
+  border-color: rgba(77, 166, 255, 0.25);
+  background: var(--blue-bg);
 }
 
 .stat-content {

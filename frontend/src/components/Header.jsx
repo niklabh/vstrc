@@ -1,6 +1,8 @@
 import React from 'react';
 import './Header.css';
 
+const WHITEPAPER_URL = 'https://github.com/niklabh/vstrc/blob/main/docs/WHITEPAPER.md';
+
 const CHAIN_NAMES = {
   1: 'Ethereum',
   11155111: 'Sepolia',
@@ -16,10 +18,10 @@ function Header({ account, chainId, onConnect }) {
     <header className="header">
       <div className="header-inner">
         <div className="header-logo">
-          <img src="/logo.svg" alt="vSTRC" className="logo-icon" />
+          <img src="/logo.svg" alt="vSTRC protocol logo" className="logo-icon" />
           <div className="logo-text">
             <span className="logo-name">vSTRC</span>
-            <span className="logo-tagline">Bitcoin-Backed Yield</span>
+            <span className="logo-tagline">Rules-Based BTC Yield</span>
           </div>
         </div>
 
@@ -27,8 +29,8 @@ function Header({ account, chainId, onConnect }) {
           <a href="#vault" className="nav-link">Vault</a>
           <a href="#yield" className="nav-link">Yield</a>
           <a href="#treasury" className="nav-link">Treasury</a>
-          <a href="#how-it-works" className="nav-link">Docs</a>
-          <a href="/whitepaper.pdf" className="nav-link" target="_blank" rel="noopener">Whitepaper</a>
+          <a href="#how-it-works" className="nav-link">How It Works</a>
+          <a href={WHITEPAPER_URL} className="nav-link" target="_blank" rel="noopener">Whitepaper</a>
         </nav>
 
         <div className="header-actions">

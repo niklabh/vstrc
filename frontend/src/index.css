@@ -34,11 +34,13 @@
   --yellow-bg: rgba(255, 204, 0, 0.1);
   --blue: #4da6ff;
   --blue-bg: rgba(77, 166, 255, 0.1);
+  --cypher-cyan: #00d7ff;
+  --cypher-cyan-bg: rgba(0, 215, 255, 0.1);
 
   /* Gradients */
   --gradient-orange: linear-gradient(135deg, #f7931a, #ff6b00);
   --gradient-dark: linear-gradient(180deg, #0a0a1a 0%, #111128 100%);
-  --gradient-card: linear-gradient(135deg, #161637 0%, #1a1a40 100%);
+  --gradient-card: linear-gradient(145deg, #151834 0%, #171d3b 55%, #13243b 100%);
   --gradient-glow: radial-gradient(ellipse at 50% 0%, rgba(247, 147, 26, 0.15) 0%, transparent 70%);
 
   /* Sizing */
@@ -65,7 +67,17 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background: var(--bg-primary);
+  background-color: var(--bg-primary);
+  background-image:
+    radial-gradient(circle at 18% -12%, rgba(247, 147, 26, 0.14) 0%, transparent 36%),
+    radial-gradient(circle at 88% -6%, rgba(0, 215, 255, 0.11) 0%, transparent 40%),
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.015) 0,
+      rgba(255, 255, 255, 0.015) 1px,
+      transparent 1px,
+      transparent 4px
+    );
   color: var(--text-primary);
   line-height: 1.6;
   min-height: 100vh;
