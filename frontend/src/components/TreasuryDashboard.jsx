@@ -1,5 +1,11 @@
 import React from 'react';
 import './TreasuryDashboard.css';
+import {
+  BtcCoreIcon,
+  CashReserveIcon,
+  LockVaultIcon,
+  PriceFeedIcon,
+} from './ProtocolIcons';
 
 function TreasuryDashboard({ data, demoMode }) {
   const formatUSD = (value) => {
@@ -24,7 +30,7 @@ function TreasuryDashboard({ data, demoMode }) {
   return (
     <div className="treasury-dashboard card" id="treasury">
       <div className="panel-header">
-        <h2 className="panel-title">BTC Treasury</h2>
+        <h2 className="panel-title">BTC Treasury Allocation</h2>
         <div className={`status-chip ${crColor}`}>
           {crStatus.toUpperCase()}
         </div>
@@ -44,32 +50,39 @@ function TreasuryDashboard({ data, demoMode }) {
       <div className="treasury-details">
         <div className="treasury-row">
           <div className="treasury-item">
-            <div className="treasury-dot btc" />
+            <div className="treasury-icon btc">
+              <BtcCoreIcon />
+            </div>
             <div className="treasury-info">
-              <span className="treasury-label">BTC Treasury</span>
+              <span className="treasury-label">BTC Reserve</span>
               <span className="treasury-value">{formatUSD(btcValue)}</span>
             </div>
           </div>
-          <span className="treasury-sub">via Uniswap V3</span>
+          <span className="treasury-sub">Uniswap V3 routed exposure</span>
         </div>
 
         <div className="treasury-row">
           <div className="treasury-item">
-            <div className="treasury-dot cash" />
+            <div className="treasury-icon cash">
+              <CashReserveIcon />
+            </div>
             <div className="treasury-info">
-              <span className="treasury-label">Cash Reserve</span>
+              <span className="treasury-label">USDC Reserve</span>
               <span className="treasury-value">{formatUSD(cashValue)}</span>
             </div>
           </div>
-          <span className="treasury-sub">Aave V3 USDC</span>
+          <span className="treasury-sub">Aave V3 liquidity buffer</span>
         </div>
 
         <div className="treasury-divider" />
 
         <div className="treasury-row total">
           <div className="treasury-item">
+            <div className="treasury-icon total">
+              <LockVaultIcon />
+            </div>
             <div className="treasury-info">
-              <span className="treasury-label">Total Value</span>
+              <span className="treasury-label">Total Treasury Value</span>
               <span className="treasury-value">{formatUSD(totalValue)}</span>
             </div>
           </div>
@@ -79,7 +92,7 @@ function TreasuryDashboard({ data, demoMode }) {
       {/* Collateral Ratio */}
       <div className="cr-section">
         <div className="cr-header">
-          <span className="cr-title">Collateral Ratio</span>
+          <span className="cr-title">Collateral Coverage</span>
           <span className={`cr-value ${crColor}`}>{cr.toFixed(2)}x</span>
         </div>
         <div className="cr-bar">
@@ -100,11 +113,12 @@ function TreasuryDashboard({ data, demoMode }) {
 
       {/* BTC Price */}
       <div className="btc-price-box">
+        <PriceFeedIcon className="btc-price-icon" />
         <span className="btc-price-label">BTC Price</span>
         <span className="btc-price-value">
           ${parseFloat(data.btcPrice || 97000).toLocaleString()}
         </span>
-        <span className="btc-price-source">Chainlink BTC/USD</span>
+        <span className="btc-price-source">Chainlink BTC/USD feed</span>
       </div>
     </div>
   );

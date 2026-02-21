@@ -20,6 +20,16 @@
   z-index: 0;
 }
 
+.bg-glow::after {
+  content: '';
+  position: absolute;
+  top: 120px;
+  left: -180px;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(ellipse, rgba(0, 215, 255, 0.07) 0%, transparent 68%);
+}
+
 main {
   max-width: var(--max-width);
   margin: 0 auto;

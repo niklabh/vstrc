@@ -1,5 +1,6 @@
 import React from 'react';
 import './YieldEngine.css';
+import { ArrowRightIcon, LoopIcon } from './ProtocolIcons';
 
 function YieldEngine({ data, demoMode }) {
   const currentRate = (data.currentRate || 800) / 100;
@@ -19,16 +20,16 @@ function YieldEngine({ data, demoMode }) {
   };
 
   const getStatusText = () => {
-    if (currentRate > baseRate + 3) return 'Yield Boost (Below Peg)';
-    if (currentRate > baseRate) return 'Slight Boost';
-    if (currentRate < baseRate - 2) return 'Yield Reduced (Above Peg)';
-    return 'Stable (At Peg)';
+    if (currentRate > baseRate + 3) return 'Strong Boost (Below Peg)';
+    if (currentRate > baseRate) return 'Mild Boost (Below Peg)';
+    if (currentRate < baseRate - 2) return 'Cooldown (Above Peg)';
+    return 'Peg Aligned';
   };
 
   return (
     <div className="yield-engine card" id="yield">
       <div className="panel-header">
-        <h2 className="panel-title">Self-Tuning Yield</h2>
+        <h2 className="panel-title">Adaptive Yield Controller</h2>
         <div className={`status-chip ${getStatusColor()}`}>
           {getStatusText()}
         </div>
@@ -51,7 +52,7 @@ function YieldEngine({ data, demoMode }) {
 
       {/* Formula */}
       <div className="formula-box">
-        <div className="formula-title">VDR Formula</div>
+        <div className="formula-title">Rate Control Formula</div>
         <code className="formula-code">
           VDR = 8% + 20% × ($100 - P<sub>market</sub>) / $100
         </code>
@@ -87,23 +88,29 @@ function YieldEngine({ data, demoMode }) {
 
       {/* Feedback explanation */}
       <div className="feedback-box">
-        <div className="feedback-title">Stabilization Loop</div>
+        <div className="feedback-title">Peg Control Loop</div>
         <div className="feedback-steps">
           <div className="feedback-step">
             <div className="step-num">1</div>
-            <div className="step-text">Oracle reports vSTRC price</div>
+            <div className="step-text">Oracle posts vSTRC price</div>
           </div>
-          <div className="feedback-arrow">→</div>
+          <div className="feedback-arrow" aria-hidden="true">
+            <ArrowRightIcon />
+          </div>
           <div className="feedback-step">
             <div className="step-num">2</div>
-            <div className="step-text">VDR adjusts yield rate</div>
+            <div className="step-text">Epoch rate updates on-chain</div>
           </div>
-          <div className="feedback-arrow">→</div>
+          <div className="feedback-arrow" aria-hidden="true">
+            <ArrowRightIcon />
+          </div>
           <div className="feedback-step">
             <div className="step-num">3</div>
-            <div className="step-text">Market reacts to yield</div>
+            <div className="step-text">Deposits and redeems rebalance price</div>
           </div>
-          <div className="feedback-arrow">↻</div>
+          <div className="feedback-arrow loop" aria-hidden="true">
+            <LoopIcon />
+          </div>
         </div>
       </div>
     </div>

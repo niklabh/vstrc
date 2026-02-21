@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <symbol id="lock-vault" viewBox="0 0 24 24">
+      <path d="M8 10V7a4 4 0 1 1 8 0v3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+      <rect x="5" y="10" width="14" height="10" rx="2.5" stroke="currentColor" stroke-width="1.9" />
+      <circle cx="12" cy="15" r="1.2" fill="currentColor" />
+      <path d="M12 16.2V17.6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+    </symbol>
+
+    <symbol id="coin-stack" viewBox="0 0 24 24">
+      <ellipse cx="12" cy="6.5" rx="6.5" ry="2.8" stroke="currentColor" stroke-width="1.9" />
+      <path d="M5.5 6.5V10.2C5.5 11.75 8.41 13 12 13C15.59 13 18.5 11.75 18.5 10.2V6.5" stroke="currentColor" stroke-width="1.9" />
+      <path d="M5.5 10.2V13.9C5.5 15.45 8.41 16.7 12 16.7C15.59 16.7 18.5 15.45 18.5 13.9V10.2" stroke="currentColor" stroke-width="1.9" />
+      <path d="M5.5 13.9V17.5C5.5 19.05 8.41 20.3 12 20.3C15.59 20.3 18.5 19.05 18.5 17.5V13.9" stroke="currentColor" stroke-width="1.9" />
+    </symbol>
+
+    <symbol id="trend-up" viewBox="0 0 24 24">
+      <path d="M4 16.5L9.2 11.3L12.5 14.6L19.8 7.3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M15.5 7.3H19.8V11.6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+    </symbol>
+
+    <symbol id="shield-check" viewBox="0 0 24 24">
+      <path d="M12 3L19 6V11.6C19 15.8 16.1 19.6 12 21C7.9 19.6 5 15.8 5 11.6V6L12 3Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" />
+      <path d="M9 12.2L11.1 14.3L15.2 10.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+    </symbol>
+
+    <symbol id="epoch-clock" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.9" />
+      <path d="M12 7.7V12L15.2 14.1" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M12 2.7V4.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+      <path d="M4.7 12H3.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+      <path d="M20.8 12H19.3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+    </symbol>
+
+    <symbol id="wallet-deposit" viewBox="0 0 24 24">
+      <rect x="3.5" y="6.5" width="17" height="11" rx="2.4" stroke="currentColor" stroke-width="1.9" />
+      <path d="M14 12H20.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+      <path d="M9 4.5L12 1.8L15 4.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M12 2.1V9.1" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+      <circle cx="16.8" cy="12" r="1.1" fill="currentColor" />
+    </symbol>
+
+    <symbol id="split-route" viewBox="0 0 24 24">
+      <circle cx="6" cy="12" r="2.3" stroke="currentColor" stroke-width="1.9" />
+      <circle cx="18" cy="7" r="2.3" stroke="currentColor" stroke-width="1.9" />
+      <circle cx="18" cy="17" r="2.3" stroke="currentColor" stroke-width="1.9" />
+      <path d="M8.3 11.2L15.7 7.8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+      <path d="M8.3 12.8L15.7 16.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+    </symbol>
+
+    <symbol id="signal-rate" viewBox="0 0 24 24">
+      <path d="M4 17.5L8.5 13L11.5 16L17.8 9.7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M14.4 9.7H17.8V13.1" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M4 20.3H20" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+    </symbol>
+
+    <symbol id="redeem-cycle" viewBox="0 0 24 24">
+      <path d="M6.2 9A7 7 0 0 1 18.8 8.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+      <path d="M18.8 15A7 7 0 0 1 5.2 15.8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+      <path d="M18.8 8.2V4.7H15.3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M5.2 15.8V19.3H8.7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+    </symbol>
+
+    <symbol id="arrow-right" viewBox="0 0 24 24">
+      <path d="M5 12H18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      <path d="M13.5 7.5L18 12L13.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </symbol>
+
+    <symbol id="loop" viewBox="0 0 24 24">
+      <path d="M4.5 10.5A7.6 7.6 0 0 1 18.5 7.8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+      <path d="M18.5 13.5A7.6 7.6 0 0 1 4.8 16.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+      <path d="M18.5 7.8V4.5H15.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M4.8 16.2V19.5H8.1" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+    </symbol>
+
+    <symbol id="wallet-connect" viewBox="0 0 24 24">
+      <rect x="3.5" y="7" width="17" height="11" rx="2.2" stroke="currentColor" stroke-width="1.9" />
+      <path d="M15 12H20.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+      <circle cx="16.8" cy="12" r="1.1" fill="currentColor" />
+      <path d="M8 4.2V8.1" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+      <path d="M6.1 6.1H9.9" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+    </symbol>
+
+    <symbol id="paper-doc" viewBox="0 0 24 24">
+      <path d="M7 3.5H13.5L18 8V20.5H7V3.5Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" />
+      <path d="M13.5 3.5V8H18" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" />
+      <path d="M9.6 11.4H15.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+      <path d="M9.6 14.4H15.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+      <path d="M9.6 17.4H13.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+    </symbol>
+
+    <symbol id="deposit-action" viewBox="0 0 24 24">
+      <rect x="4.5" y="14.6" width="15" height="5" rx="1.8" stroke="currentColor" stroke-width="1.9" />
+      <path d="M12 4.5V14.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+      <path d="M8.6 11.1L12 14.5L15.4 11.1" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+    </symbol>
+
+    <symbol id="redeem-action" viewBox="0 0 24 24">
+      <path d="M6 9.2H18.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+      <path d="M14.6 5.8L18.2 9.2L14.6 12.6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M18 14.8H5.8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+      <path d="M9.4 18.2L5.8 14.8L9.4 11.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+    </symbol>
+
+    <symbol id="network-chain" viewBox="0 0 24 24">
+      <circle cx="5.4" cy="12" r="1.8" stroke="currentColor" stroke-width="1.7" />
+      <circle cx="12" cy="5.4" r="1.8" stroke="currentColor" stroke-width="1.7" />
+      <circle cx="18.6" cy="12" r="1.8" stroke="currentColor" stroke-width="1.7" />
+      <circle cx="12" cy="18.6" r="1.8" stroke="currentColor" stroke-width="1.7" />
+      <path d="M7.1 11.2L10.3 7.1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+      <path d="M13.7 7.1L16.9 11.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+      <path d="M16.9 12.8L13.7 16.9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+      <path d="M10.3 16.9L7.1 12.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+    </symbol>
+
+    <symbol id="btc-core" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.9" />
+      <path d="M12 7.1V16.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+      <path d="M9.7 8.5H13.2C14.7 8.5 15.6 9.2 15.6 10.4C15.6 11.7 14.7 12.4 13.2 12.4H9.7V8.5Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" />
+      <path d="M9.7 12.4H13.6C15.2 12.4 16.1 13.2 16.1 14.5C16.1 15.8 15.2 16.6 13.6 16.6H9.7V12.4Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" />
+      <path d="M10.6 6V8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+      <path d="M13.4 6V8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+      <path d="M10.6 16.6V19" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+      <path d="M13.4 16.6V19" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+    </symbol>
+
+    <symbol id="cash-reserve" viewBox="0 0 24 24">
+      <rect x="3.8" y="6.4" width="16.4" height="11.2" rx="2.2" stroke="currentColor" stroke-width="1.9" />
+      <circle cx="12" cy="12" r="2.4" stroke="currentColor" stroke-width="1.9" />
+      <path d="M6.8 9.2V9.2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+      <path d="M17.2 14.8V14.8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+      <path d="M12 10.4V13.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+    </symbol>
+
+    <symbol id="price-feed" viewBox="0 0 24 24">
+      <rect x="3.6" y="5" width="16.8" height="13.2" rx="2.2" stroke="currentColor" stroke-width="1.9" />
+      <path d="M6.4 14.4L9.1 11.7L11.3 13.9L14.9 10.3L17.6 13" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M8.2 20.2H15.8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+    </symbol>
+
+    <symbol id="spark" viewBox="0 0 24 24">
+      <path d="M12 3.2L13.8 8.2L18.8 10L13.8 11.8L12 16.8L10.2 11.8L5.2 10L10.2 8.2L12 3.2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+      <path d="M18.3 15.8L19.1 18L21.3 18.8L19.1 19.6L18.3 21.8L17.5 19.6L15.3 18.8L17.5 18L18.3 15.8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+    </symbol>
+
+    <symbol id="code-brackets" viewBox="0 0 24 24">
+      <path d="M9.6 7L5.2 12L9.6 17" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M14.4 7L18.8 12L14.4 17" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M12.9 5.7L11.1 18.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+    </symbol>
+  </defs>
+</svg>

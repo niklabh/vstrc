@@ -1,5 +1,8 @@
 import React from 'react';
 import './HeroSection.css';
+import { ArrowRightIcon, PaperDocIcon } from './ProtocolIcons';
+
+const WHITEPAPER_URL = 'https://github.com/niklabh/vstrc/blob/main/docs/WHITEPAPER.md';
 
 function HeroSection() {
   return (
@@ -7,35 +10,35 @@ function HeroSection() {
       <div className="hero-content">
         <div className="hero-badge">
           <span className="hero-badge-dot" />
-          Powered by Bitcoin Treasury
+          On-chain treasury protocol
         </div>
 
         <h1 className="hero-title">
-          <span className="gradient-text">Bitcoin-Backed</span>
+          <span className="gradient-text">Bitcoin Treasury Yield</span>
           <br />
-          Yield-Bearing Vault
+          for Stablecoin Capital
         </h1>
 
         <p className="hero-subtitle">
-          Deposit USDC. Earn variable yield backed by a Bitcoin treasury.
+          Deposit USDC into a rules-based ERC-4626 vault backed by BTC exposure and liquid reserves.
           <br />
-          Inspired by MicroStrategy's STRC — rebuilt for DeFi.
+          vSTRC targets a $100 share value and adjusts yield each epoch to defend the peg.
         </p>
 
         <div className="hero-metrics">
           <div className="hero-metric">
             <span className="hero-metric-value">$100</span>
-            <span className="hero-metric-label">Target Peg</span>
+            <span className="hero-metric-label">Share Target</span>
           </div>
           <div className="hero-metric-divider" />
           <div className="hero-metric">
             <span className="hero-metric-value">8-25%</span>
-            <span className="hero-metric-label">Variable APY</span>
+            <span className="hero-metric-label">Adaptive Yield Band</span>
           </div>
           <div className="hero-metric-divider" />
           <div className="hero-metric">
             <span className="hero-metric-value">80/20</span>
-            <span className="hero-metric-label">BTC/Cash Split</span>
+            <span className="hero-metric-label">BTC / Reserve Mix</span>
           </div>
           <div className="hero-metric-divider" />
           <div className="hero-metric">
@@ -46,13 +49,12 @@ function HeroSection() {
 
         <div className="hero-cta">
           <a href="#vault" className="btn-primary">
-            Start Earning
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            Enter Vault
+            <ArrowRightIcon />
           </a>
-          <a href="https://github.com/niklabh/vstrc" className="btn-secondary" target="_blank" rel="noopener">
-            Read Whitepaper
+          <a href={WHITEPAPER_URL} className="btn-secondary" target="_blank" rel="noopener">
+            <PaperDocIcon />
+            Read Protocol Paper
           </a>
         </div>
       </div>

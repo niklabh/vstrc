@@ -1,5 +1,5 @@
 .footer {
-  border-top: 1px solid var(--border-primary);
+  border-top: 1px solid rgba(77, 166, 255, 0.2);
   margin-top: 64px;
 }
 
@@ -30,7 +30,7 @@
 
 .footer-tagline {
   font-size: 14px;
-  color: var(--text-secondary);
+  color: #90a2c5;
   line-height: 1.6;
 }
 
@@ -49,27 +49,40 @@
 .footer-col-title {
   font-size: 13px;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #a7d7ff;
   margin-bottom: 4px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
+  font-family: var(--font-mono);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-title-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--cypher-cyan);
+  animation: iconFloat 5.5s ease-in-out infinite;
 }
 
 .footer-col a {
   font-size: 14px;
   color: var(--text-secondary);
-  transition: color 0.2s;
+  transition: color 0.2s, transform 0.2s;
   text-decoration: none;
+  width: fit-content;
 }
 .footer-col a:hover {
-  color: var(--btc-orange);
+  color: var(--cypher-cyan);
+  transform: translateX(2px);
 }
 
 .footer-bottom {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 20px 24px;
-  border-top: 1px solid var(--border-primary);
+  border-top: 1px solid rgba(77, 166, 255, 0.15);
   text-align: center;
 }
 

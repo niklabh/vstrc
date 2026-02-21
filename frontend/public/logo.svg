@@ -1,16 +1,46 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#f7931a"/>
-      <stop offset="100%" style="stop-color:#ff6b00"/>
+    <linearGradient id="frame" x1="14" y1="14" x2="114" y2="114" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f7931a" />
+      <stop offset="1" stop-color="#00d7ff" />
     </linearGradient>
-    <linearGradient id="inner" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1a1a2e"/>
-      <stop offset="100%" style="stop-color:#16213e"/>
+    <linearGradient id="core" x1="20" y1="20" x2="108" y2="108" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#10142a" />
+      <stop offset="1" stop-color="#070b19" />
     </linearGradient>
+    <linearGradient id="sigil" x1="49" y1="30" x2="79" y2="98" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffc15d" />
+      <stop offset="1" stop-color="#f7931a" />
+    </linearGradient>
+    <filter id="coreGlow" x="32" y="22" width="64" height="84" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#f7931a" flood-opacity="0.28" />
+    </filter>
   </defs>
-  <circle cx="60" cy="60" r="58" fill="url(#bg)"/>
-  <circle cx="60" cy="60" r="48" fill="url(#inner)"/>
-  <text x="60" y="52" text-anchor="middle" fill="#f7931a" font-family="Inter, sans-serif" font-weight="800" font-size="22">v</text>
-  <text x="60" y="78" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-weight="800" font-size="24">STRC</text>
+
+  <rect x="6" y="6" width="116" height="116" rx="30" fill="#050714" />
+  <rect x="6.5" y="6.5" width="115" height="115" rx="29.5" stroke="url(#frame)" stroke-width="3" />
+  <rect x="18" y="18" width="92" height="92" rx="22" fill="url(#core)" stroke="#1f2748" stroke-width="1.4" />
+
+  <g stroke="#00d7ff" stroke-width="1.6" stroke-linecap="round" opacity="0.45">
+    <path d="M24 40H42" />
+    <path d="M86 40H104" />
+    <path d="M24 88H42" />
+    <path d="M86 88H104" />
+    <path d="M40 24V42" />
+    <path d="M88 24V42" />
+    <path d="M40 86V104" />
+    <path d="M88 86V104" />
+  </g>
+  <g fill="#00d7ff" opacity="0.6">
+    <circle cx="24" cy="40" r="2.1" />
+    <circle cx="104" cy="40" r="2.1" />
+    <circle cx="24" cy="88" r="2.1" />
+    <circle cx="104" cy="88" r="2.1" />
+  </g>
+
+  <g filter="url(#coreGlow)">
+    <path d="M64 27L84 39V65L64 100L44 65V39L64 27Z" fill="url(#sigil)" />
+    <path d="M51 45L64 75L77 45" stroke="#0b1226" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M51 45L64 72L77 45" stroke="#f5f7ff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
 </svg>
