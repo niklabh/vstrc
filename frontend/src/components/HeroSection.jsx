@@ -1,6 +1,6 @@
 import React from 'react';
 import './HeroSection.css';
-import { ArrowRightIcon } from './ProtocolIcons';
+import { ArrowRightIcon, PaperDocIcon } from './ProtocolIcons';
 
 const WHITEPAPER_URL = 'https://github.com/niklabh/vstrc/blob/main/docs/WHITEPAPER.md';
 
@@ -53,6 +53,7 @@ function HeroSection() {
             <ArrowRightIcon />
           </a>
           <a href={WHITEPAPER_URL} className="btn-secondary" target="_blank" rel="noopener">
+            <PaperDocIcon />
             Read Protocol Paper
           </a>
         </div>

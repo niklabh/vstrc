@@ -81,11 +81,13 @@
   background: rgba(247, 147, 26, 0.08);
   border: 1px solid rgba(247, 147, 26, 0.24);
   flex-shrink: 0;
+  transition: transform 0.24s ease, box-shadow 0.24s ease;
 }
 
 .step-icon svg {
   width: 22px;
   height: 22px;
+  animation: iconFloat 5s ease-in-out infinite;
 }
 
 .step-icon.blue {
@@ -98,6 +100,11 @@
   color: var(--green);
   background: var(--green-bg);
   border-color: rgba(0, 214, 143, 0.26);
+}
+
+.step-card:hover .step-icon {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.3);
 }
 
 .step-number {

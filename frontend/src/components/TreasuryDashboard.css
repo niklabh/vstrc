@@ -55,17 +55,45 @@
   gap: 12px;
 }
 
-.treasury-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
+.treasury-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.treasury-dot.btc {
-  background: var(--btc-orange);
+
+.treasury-icon svg {
+  width: 19px;
+  height: 19px;
+  animation: iconFloat 4.8s ease-in-out infinite;
 }
-.treasury-dot.cash {
-  background: #2684ff;
+
+.treasury-icon.btc {
+  color: var(--btc-orange);
+  background: rgba(247, 147, 26, 0.12);
+  border-color: rgba(247, 147, 26, 0.25);
+}
+
+.treasury-icon.cash {
+  color: var(--blue);
+  background: rgba(38, 132, 255, 0.12);
+  border-color: rgba(38, 132, 255, 0.25);
+}
+
+.treasury-icon.total {
+  color: var(--cypher-cyan);
+  background: rgba(0, 215, 255, 0.12);
+  border-color: rgba(0, 215, 255, 0.25);
+}
+
+.treasury-row:hover .treasury-icon {
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.24);
 }
 
 .treasury-info {
@@ -177,6 +205,12 @@
   background: rgba(247, 147, 26, 0.05);
   border: 1px solid rgba(247, 147, 26, 0.1);
   border-radius: var(--radius-md);
+}
+
+.btc-price-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--btc-orange);
 }
 
 .btc-price-label {

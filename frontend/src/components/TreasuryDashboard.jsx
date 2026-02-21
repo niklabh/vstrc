@@ -1,5 +1,11 @@
 import React from 'react';
 import './TreasuryDashboard.css';
+import {
+  BtcCoreIcon,
+  CashReserveIcon,
+  LockVaultIcon,
+  PriceFeedIcon,
+} from './ProtocolIcons';
 
 function TreasuryDashboard({ data, demoMode }) {
   const formatUSD = (value) => {
@@ -44,7 +50,9 @@ function TreasuryDashboard({ data, demoMode }) {
       <div className="treasury-details">
         <div className="treasury-row">
           <div className="treasury-item">
-            <div className="treasury-dot btc" />
+            <div className="treasury-icon btc">
+              <BtcCoreIcon />
+            </div>
             <div className="treasury-info">
               <span className="treasury-label">BTC Reserve</span>
               <span className="treasury-value">{formatUSD(btcValue)}</span>
@@ -55,7 +63,9 @@ function TreasuryDashboard({ data, demoMode }) {
 
         <div className="treasury-row">
           <div className="treasury-item">
-            <div className="treasury-dot cash" />
+            <div className="treasury-icon cash">
+              <CashReserveIcon />
+            </div>
             <div className="treasury-info">
               <span className="treasury-label">USDC Reserve</span>
               <span className="treasury-value">{formatUSD(cashValue)}</span>
@@ -68,6 +78,9 @@ function TreasuryDashboard({ data, demoMode }) {
 
         <div className="treasury-row total">
           <div className="treasury-item">
+            <div className="treasury-icon total">
+              <LockVaultIcon />
+            </div>
             <div className="treasury-info">
               <span className="treasury-label">Total Treasury Value</span>
               <span className="treasury-value">{formatUSD(totalValue)}</span>
@@ -100,6 +113,7 @@ function TreasuryDashboard({ data, demoMode }) {
 
       {/* BTC Price */}
       <div className="btc-price-box">
+        <PriceFeedIcon className="btc-price-icon" />
         <span className="btc-price-label">BTC Price</span>
         <span className="btc-price-value">
           ${parseFloat(data.btcPrice || 97000).toLocaleString()}

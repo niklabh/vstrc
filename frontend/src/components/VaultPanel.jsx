@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
 import './VaultPanel.css';
+import {
+  DepositActionIcon,
+  RedeemActionIcon,
+  SparkIcon,
+  WalletConnectIcon,
+} from './ProtocolIcons';
 
 function VaultPanel({ account, userData, protocolData, onDeposit, onRedeem, loading, txStatus, demoMode, onConnect }) {
   const [activeTab, setActiveTab] = useState('deposit');
@@ -55,12 +61,14 @@ function VaultPanel({ account, userData, protocolData, onDeposit, onRedeem, load
           className={`vault-tab ${activeTab === 'deposit' ? 'active' : ''}`}
           onClick={() => { setActiveTab('deposit'); setAmount(''); }}
         >
+          <DepositActionIcon className="tab-icon" />
           Deposit
         </button>
         <button
           className={`vault-tab ${activeTab === 'redeem' ? 'active' : ''}`}
           onClick={() => { setActiveTab('redeem'); setAmount(''); }}
         >
+          <RedeemActionIcon className="tab-icon" />
           Redeem
         </button>
       </div>
@@ -101,6 +109,7 @@ function VaultPanel({ account, userData, protocolData, onDeposit, onRedeem, load
             />
             <div className="input-suffix">
               <button type="button" className="max-btn" onClick={setMaxAmount}>
+                <SparkIcon className="max-icon" />
                 MAX
               </button>
               <span className="input-token">
@@ -144,6 +153,7 @@ function VaultPanel({ account, userData, protocolData, onDeposit, onRedeem, load
         {/* Submit Button */}
         {!account ? (
           <button type="button" className="submit-btn" onClick={onConnect}>
+            <WalletConnectIcon className="vault-btn-icon" />
             Connect Wallet
           </button>
         ) : (
@@ -155,7 +165,14 @@ function VaultPanel({ account, userData, protocolData, onDeposit, onRedeem, load
             {loading ? (
               <span className="spinner" />
             ) : (
-              activeTab === 'deposit' ? 'Deposit USDC' : 'Redeem vSTRC'
+              <>
+                {activeTab === 'deposit' ? (
+                  <DepositActionIcon className="vault-btn-icon" />
+                ) : (
+                  <RedeemActionIcon className="vault-btn-icon" />
+                )}
+                {activeTab === 'deposit' ? 'Deposit USDC' : 'Redeem vSTRC'}
+              </>
             )}
           </button>
         )}

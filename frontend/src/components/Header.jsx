@@ -1,5 +1,6 @@
 import React from 'react';
 import './Header.css';
+import { NetworkChainIcon, WalletConnectIcon } from './ProtocolIcons';
 
 const WHITEPAPER_URL = 'https://github.com/niklabh/vstrc/blob/main/docs/WHITEPAPER.md';
 
@@ -38,16 +39,19 @@ function Header({ account, chainId, onConnect }) {
             <div className="wallet-info">
               {chainId && (
                 <span className="chain-badge">
+                  <NetworkChainIcon className="chain-icon" />
                   {CHAIN_NAMES[chainId] || `Chain ${chainId}`}
                 </span>
               )}
               <button className="wallet-btn connected">
+                <NetworkChainIcon className="header-btn-icon" />
                 <span className="wallet-dot" />
                 {shortenAddress(account)}
               </button>
             </div>
           ) : (
             <button className="wallet-btn connect" onClick={onConnect}>
+              <WalletConnectIcon className="header-btn-icon" />
               Connect Wallet
             </button>
           )}

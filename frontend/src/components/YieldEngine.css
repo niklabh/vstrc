@@ -161,6 +161,8 @@
   background: var(--bg-input);
   padding: 8px 12px;
   border-radius: var(--radius-sm);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  border: 1px solid transparent;
 }
 
 .step-num {
@@ -175,6 +177,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 .step-text {
@@ -193,8 +196,14 @@
 .feedback-arrow svg {
   width: 18px;
   height: 18px;
+  animation: iconFloat 4s ease-in-out infinite;
 }
 
 .feedback-arrow.loop {
   color: var(--blue);
+}
+
+.feedback-step:hover {
+  transform: translateY(-2px);
+  border-color: rgba(77, 166, 255, 0.18);
 }

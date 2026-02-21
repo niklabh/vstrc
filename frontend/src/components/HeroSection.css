@@ -97,8 +97,26 @@
   border-radius: var(--radius-md);
   font-size: 15px;
   font-weight: 700;
-  transition: all 0.2s;
+  transition: all 0.24s ease;
   text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before,
+.btn-secondary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(125deg, transparent 20%, rgba(255, 255, 255, 0.18) 50%, transparent 80%);
+  transform: translateX(-130%);
+  transition: transform 0.5s ease;
+}
+
+.btn-primary > *,
+.btn-secondary > * {
+  position: relative;
+  z-index: 1;
 }
 .btn-primary:hover {
   transform: translateY(-2px);
@@ -106,10 +124,16 @@
   color: white;
 }
 
+.btn-primary:hover::before,
+.btn-secondary:hover::before {
+  transform: translateX(120%);
+}
+
 .btn-primary svg,
 .btn-secondary svg {
-  width: 16px;
-  height: 16px;
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
 }
 
 .btn-secondary {
@@ -123,12 +147,15 @@
   border-radius: var(--radius-md);
   font-size: 15px;
   font-weight: 600;
-  transition: all 0.2s;
+  transition: all 0.24s ease;
   text-decoration: none;
+  position: relative;
+  overflow: hidden;
 }
 .btn-secondary:hover {
   border-color: var(--cypher-cyan);
   color: var(--text-primary);
+  box-shadow: 0 8px 24px rgba(0, 215, 255, 0.16);
 }
 
 /* Hero Visual — Orbit Animation */
@@ -172,6 +199,7 @@
   font-size: 11px;
   font-weight: 700;
   font-family: var(--font-mono);
+  animation: iconFloat 4s ease-in-out infinite;
 }
 
 .btc-dot {
@@ -184,6 +212,7 @@
   background: rgba(38, 132, 255, 0.2);
   color: #2684ff;
   border: 1px solid rgba(38, 132, 255, 0.3);
+  animation-delay: 0.7s;
 }
 
 .orbit-center {
