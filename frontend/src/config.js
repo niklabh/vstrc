@@ -18,9 +18,10 @@ const NETWORKS = {
     rpcUrl: "https://rpc.sepolia.org",
     blockExplorer: "https://sepolia.etherscan.io",
     contracts: {
-      vault: import.meta.env.VITE_VAULT_ADDRESS || "0x0000000000000000000000000000000000000000",
-      usdc: import.meta.env.VITE_USDC_ADDRESS || "0x0000000000000000000000000000000000000000",
-      strategy: import.meta.env.VITE_STRATEGY_ADDRESS || "0x0000000000000000000000000000000000000000",
+      // Defaults from current sepolia deployment for read-only/live dashboard mode
+      vault: import.meta.env.VITE_VAULT_ADDRESS || "0x201b86F2959478576FCc2318bfB005e059c2f569",
+      usdc: import.meta.env.VITE_USDC_ADDRESS || "0x64c3384fD4EC66f290C06ac3516B61EEE78A7486",
+      strategy: import.meta.env.VITE_STRATEGY_ADDRESS || "0xaE825a1201c678668dc09eBBb9D413fE9763caa9",
     },
   },
 

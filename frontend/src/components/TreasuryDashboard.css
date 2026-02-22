@@ -200,6 +200,7 @@
 .btc-price-box {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
   padding: 12px 16px;
   background: rgba(247, 147, 26, 0.05);
@@ -224,11 +225,25 @@
   font-weight: 800;
   font-family: var(--font-mono);
   color: var(--btc-orange);
-  flex: 1;
+}
+
+.btc-price-change {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.btc-price-change.up {
+  color: var(--green);
+}
+
+.btc-price-change.down {
+  color: var(--red);
 }
 
 .btc-price-source {
   font-size: 10px;
   color: var(--text-tertiary);
   font-family: var(--font-mono);
+  margin-left: auto;
 }

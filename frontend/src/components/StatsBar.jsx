@@ -1,6 +1,7 @@
 import React from 'react';
 import './StatsBar.css';
 import {
+  BtcCoreIcon,
   LockVaultIcon,
   CoinStackIcon,
   TrendUpIcon,
@@ -8,7 +9,7 @@ import {
   EpochClockIcon,
 } from './ProtocolIcons';
 
-function StatsBar({ data, demoMode }) {
+function StatsBar({ data, demoMode, hasLiveData }) {
   const formatUSD = (value) => {
     const num = parseFloat(value);
     if (isNaN(num)) return '$0.00';
@@ -16,6 +17,15 @@ function StatsBar({ data, demoMode }) {
     if (num >= 1e3) return `$${(num / 1e3).toFixed(1)}K`;
     return `$${num.toFixed(2)}`;
   };
+  const formatPrice = (value) => {
+    const num = parseFloat(value);
+    if (!Number.isFinite(num) || num <= 0) return '$--';
+    return `$${Math.round(num).toLocaleString()}`;
+  };
+  const btcChange = parseFloat(data.btcPriceChange24h || '0');
+  const btcChangeText = Number.isFinite(btcChange)
+    ? `${btcChange >= 0 ? '+' : ''}${btcChange.toFixed(2)}%`
+    : '--';
 
   const stats = [
     {
@@ -23,6 +33,13 @@ function StatsBar({ data, demoMode }) {
       value: formatUSD(data.totalAssets || '0'),
       icon: LockVaultIcon,
       iconTone: 'orange',
+    },
+    {
+      label: `BTC Spot · ${btcChangeText} 24h`,
+      value: formatPrice(data.btcPrice || '0'),
+      icon: BtcCoreIcon,
+      iconTone: btcChange >= 0 ? 'green' : 'red',
+      color: btcChange >= 0 ? 'green' : 'red',
     },
     {
       label: 'vSTRC Share Price',
@@ -46,7 +63,7 @@ function StatsBar({ data, demoMode }) {
       color: parseFloat(data.collateralRatio) >= 1 ? 'green' : 'red',
     },
     {
-      label: 'Epoch',
+      label: 'Epoch Counter',
       value: `#${data.epochCount || 0}`,
       icon: EpochClockIcon,
       iconTone: 'blue',
@@ -58,7 +75,9 @@ function StatsBar({ data, demoMode }) {
       {demoMode && (
         <div className="demo-banner">
           <span className="demo-dot" />
-          Preview Mode - connect wallet for live on-chain data
+          {hasLiveData
+            ? 'Read-only mode - connect wallet to deposit and redeem'
+            : 'Loading live protocol and market data...'}
         </div>
       )}
       <div className="stats-grid">

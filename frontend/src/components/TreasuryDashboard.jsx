@@ -16,8 +16,11 @@ function TreasuryDashboard({ data, demoMode }) {
     return `$${num.toFixed(2)}`;
   };
 
-  const btcValue = parseFloat(data.btcTreasuryValue || (parseFloat(data.totalAssets) * 0.8));
-  const cashValue = parseFloat(data.cashReserveValue || (parseFloat(data.totalAssets) * 0.2));
+  const totalAssetsNum = parseFloat(data.totalAssets || '0');
+  const fetchedBtcValue = parseFloat(data.btcTreasuryValue);
+  const fetchedCashValue = parseFloat(data.cashReserveValue);
+  const btcValue = fetchedBtcValue > 0 ? fetchedBtcValue : (totalAssetsNum * 0.8);
+  const cashValue = fetchedCashValue > 0 ? fetchedCashValue : (totalAssetsNum * 0.2);
   const totalValue = btcValue + cashValue;
 
   const btcPercent = totalValue > 0 ? (btcValue / totalValue * 100).toFixed(1) : 80;
@@ -26,6 +29,18 @@ function TreasuryDashboard({ data, demoMode }) {
   const cr = parseFloat(data.collateralRatio || 1.23);
   const crStatus = cr >= 1.5 ? 'healthy' : cr >= 1.0 ? 'adequate' : 'critical';
   const crColor = cr >= 1.5 ? 'green' : cr >= 1.0 ? 'yellow' : 'red';
+  const btcPrice = parseFloat(data.btcPrice || '0');
+  const btcPriceChange24h = parseFloat(data.btcPriceChange24h || '0');
+  const marketUpdatedAt = Number(data.marketUpdatedAt || 0);
+
+  const resolvedBtcPrice = btcPrice > 0 ? btcPrice : 97000;
+  const isPriceChangePositive = btcPriceChange24h >= 0;
+  const formattedPriceChange = Number.isFinite(btcPriceChange24h)
+    ? `${isPriceChangePositive ? '+' : ''}${btcPriceChange24h.toFixed(2)}%`
+    : '--';
+  const marketAgeMinutes = marketUpdatedAt > 0
+    ? Math.max(0, Math.floor((Date.now() - marketUpdatedAt) / 60000))
+    : null;
 
   return (
     <div className="treasury-dashboard card" id="treasury">
@@ -116,9 +131,14 @@ function TreasuryDashboard({ data, demoMode }) {
         <PriceFeedIcon className="btc-price-icon" />
         <span className="btc-price-label">BTC Price</span>
         <span className="btc-price-value">
-          ${parseFloat(data.btcPrice || 97000).toLocaleString()}
+          ${resolvedBtcPrice.toLocaleString()}
         </span>
-        <span className="btc-price-source">Chainlink BTC/USD feed</span>
+        <span className={`btc-price-change ${isPriceChangePositive ? 'up' : 'down'}`}>
+          {formattedPriceChange}
+        </span>
+        <span className="btc-price-source">
+          {marketAgeMinutes === null ? 'Live market feed' : `Live market feed · ${marketAgeMinutes}m ago`}
+        </span>
       </div>
     </div>
   );

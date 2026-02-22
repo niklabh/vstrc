@@ -26,7 +26,7 @@
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   background: var(--bg-card);
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-lg);
@@ -129,22 +129,15 @@
 
 @media (max-width: 900px) {
   .stats-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
-  .stat-item:nth-child(3) {
-    border-right: none;
-  }
+  .stat-item:nth-child(2n) { border-right: none; }
 }
 
 @media (max-width: 600px) {
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .stats-grid { grid-template-columns: 1fr; }
   .stat-item {
     padding: 16px;
-  }
-  .stat-item:nth-child(2),
-  .stat-item:nth-child(4) {
     border-right: none;
   }
 }
